@@ -1,15 +1,38 @@
 <Application xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             x:Class="DocumentProcessor.Avalonia.TerrenceLGee.App"
-             xmlns:local="using:DocumentProcessor.Avalonia.TerrenceLGee"
-             RequestedThemeVariant="Default">
-             <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 x:Class="DocumentProcessor.Avalonia.TerrenceLGee.App"
+			 xmlns:local="using:DocumentProcessor.Avalonia.TerrenceLGee"
+			 RequestedThemeVariant="Default">
+	<!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
-    <Application.DataTemplates>
-        <local:ViewLocator/>
-    </Application.DataTemplates>
-  
-    <Application.Styles>
-        <FluentTheme />
-    </Application.Styles>
+	<Application.DataTemplates>
+		<local:ViewLocator/>
+	</Application.DataTemplates>
+
+	<Application.Resources>
+		<SolidColorBrush x:Key="PrimaryBrush" Color="#6200EE"/>
+		<SolidColorBrush x:Key="PrimaryHoverBrush" Color="#3700B3"/>
+		<SolidColorBrush x:Key="AccentBrush" Color="#03DAC6"/>
+
+		<SolidColorBrush x:Key="SurfaceBrush" Color="#1E1E1E"/>
+		<SolidColorBrush x:Key="SurfaceVariantBrush" Color="#2D2D2D"/>
+		<SolidColorBrush x:Key="SurfaceElevatedBrush" Color="#3A3A3A"/>
+
+		<SolidColorBrush x:Key="TextPrimaryBrush" Color="#FFFFFF"/>
+		<SolidColorBrush x:Key="TextSecondaryBrush" Color="#B0B0B0"/>
+
+		<SolidColorBrush x:Key="DangerBrush" Color="#CF6679"/>
+		<SolidColorBrush x:Key="SuccessBrush" Color="#03DAC6"/>
+		<SolidColorBrush x:Key="WarningBrush" Color="#FFB74D"/>
+
+		<SolidColorBrush x:Key="BorderBrush" Color="#444444"/>
+	</Application.Resources>
+
+
+	<Application.Styles>
+		<StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/>
+		<StyleInclude Source="avares://MsBox.Avalonia.Markdown/Controls/MarkdownView.axaml"/>
+		<StyleInclude Source="avares://DocumentProcessor.Avalonia.TerrenceLGee/Styles/AppStyles.axaml"/>
+		<FluentTheme />
+	</Application.Styles>
 </Application>

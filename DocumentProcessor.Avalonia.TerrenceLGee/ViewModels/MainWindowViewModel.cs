@@ -1,6 +1,9 @@
-﻿namespace DocumentProcessor.Avalonia.TerrenceLGee.ViewModels;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 
-public partial class MainWindowViewModel : ViewModelBase
+namespace DocumentProcessor.Avalonia.TerrenceLGee.ViewModels;
+
+public partial class MainWindowViewModel : ObservableObject
 {
-    public string Greeting { get; } = "Welcome to Avalonia!";
+    [ObservableProperty]
+    private object? _currentView;
 }

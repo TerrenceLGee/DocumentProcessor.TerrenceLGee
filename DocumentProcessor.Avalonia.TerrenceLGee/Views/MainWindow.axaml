@@ -6,8 +6,15 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="DocumentProcessor.Avalonia.TerrenceLGee.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
-        Icon="/Assets/avalonia-logo.ico"
-        Title="DocumentProcessor.Avalonia.TerrenceLGee">
+        WindowStartupLocation="CenterScreen"
+        WindowState="Maximized"
+        Width="1200"
+        Height="800"
+        TransparencyLevelHint="Mica"
+        RequestedThemeVariant="Dark"
+        Background="Transparent"
+        Icon="/Assets/contacts.png"
+        Title="Document Processor">
 
     <Design.DataContext>
         <!-- This only sets the DataContext for the previewer in an IDE,
@@ -15,6 +22,14 @@
         <vm:MainWindowViewModel/>
     </Design.DataContext>
 
-    <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+    <Window.Styles>
+		<Style Selector="Window">
+			<Setter Property="FontFamily" Value="Segoe UI, Arial, sans-serif"/>
+        </Style>
+    </Window.Styles>
+
+    <Border Background="#CC1E1E1E">
+		<ContentControl Content="{Binding CurrentView}"/>
+    </Border>
 
 </Window>
