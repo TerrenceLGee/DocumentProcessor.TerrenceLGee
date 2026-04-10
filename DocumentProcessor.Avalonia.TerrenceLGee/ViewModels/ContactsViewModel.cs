@@ -223,6 +223,7 @@ public partial class ContactsViewModel : ObservableValidator
             Id = SelectedContact.Id,
             FirstName = FirstName,
             MiddleInitial = MiddleInitial,
+            LastName = LastName,
             EmailAddress = EmailAddress,
             TelephoneNumber = TelephoneNumber
         };
@@ -288,6 +289,7 @@ public partial class ContactsViewModel : ObservableValidator
         }
     }
 
+    [RelayCommand]
     private void ClearFields()
     {
         FirstName = string.Empty;

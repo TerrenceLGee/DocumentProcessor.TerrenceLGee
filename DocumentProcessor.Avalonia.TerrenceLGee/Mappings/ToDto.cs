@@ -31,7 +31,7 @@ public static class ToDto
         {
             return contacts
                 .Select(c => c.ToRetrievedContactDto())
-                .ToPagedList(paginationParams.Page, paginationParams.PageSize);
+                .ToPagedList(contacts.TotalEntities, paginationParams.Page, paginationParams.PageSize);
         }
     }
 }

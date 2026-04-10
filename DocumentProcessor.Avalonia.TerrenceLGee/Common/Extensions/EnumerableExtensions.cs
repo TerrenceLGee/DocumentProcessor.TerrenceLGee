@@ -8,10 +8,8 @@ public static class EnumerableExtensions
 {
     extension<T>(IEnumerable<T> source)
     {
-        public PagedList<T> ToPagedList(int page, int pageSize)
+        public PagedList<T> ToPagedList(int count, int page, int pageSize)
         {
-            var count = source.Count();
-
             if (count > 0)
             {
                 var items = source.ToList();

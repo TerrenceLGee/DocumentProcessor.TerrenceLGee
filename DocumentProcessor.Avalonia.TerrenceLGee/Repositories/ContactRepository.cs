@@ -74,6 +74,7 @@ public class ContactRepository : IContactRepository
             if (contactToDelete is null) return false;
 
             _context.Contacts.Remove(contactToDelete);
+            await _context.SaveChangesAsync();
 
             return true;
         }
