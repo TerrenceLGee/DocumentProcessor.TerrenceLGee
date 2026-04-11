@@ -15,13 +15,6 @@
         Background="Transparent"
         Icon="/Assets/contacts.png"
         Title="Document Processor">
-
-    <Design.DataContext>
-        <!-- This only sets the DataContext for the previewer in an IDE,
-             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
-        <vm:MainWindowViewModel/>
-    </Design.DataContext>
-
     <Window.Styles>
 		<Style Selector="Window">
 			<Setter Property="FontFamily" Value="Segoe UI, Arial, sans-serif"/>

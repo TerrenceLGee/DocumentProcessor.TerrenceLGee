@@ -4,9 +4,9 @@ using Avalonia.Markup.Xaml;
 
 namespace DocumentProcessor.Avalonia.TerrenceLGee;
 
-public partial class ContactsView : UserControl
+public partial class MainUserView : UserControl
 {
-    public ContactsView()
+    public MainUserView()
     {
         InitializeComponent();
     }

@@ -1,131 +1,124 @@
-<Window xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:vm="using:DocumentProcessor.Avalonia.TerrenceLGee.ViewModels"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-        x:Class="DocumentProcessor.Avalonia.TerrenceLGee.ContactsView"
-        x:DataType="vm:ContactsViewModel"
-        WindowStartupLocation="CenterScreen"
-        WindowState="Maximized"
-        Width="1200"
-        Height="800"
-        TransparencyLevelHint="Mica"
-        RequestedThemeVariant="Dark"
-        Background="Transparent"
-        Icon="/Assets/contacts.png"
-        Title="Contacts">
-  <Design.DataContext>
-	  <vm:ContactsViewModel/>
-  </Design.DataContext>
-
-    <ScrollViewer>
+<UserControl xmlns="https://github.com/avaloniaui"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			 xmlns:vm="using:DocumentProcessor.Avalonia.TerrenceLGee.ViewModels"
+			 x:DataType="vm:ContactsViewModel"
+			 x:Class="DocumentProcessor.Avalonia.TerrenceLGee.ContactsView">
+	<ScrollViewer>
 		<Grid ColumnDefinitions="Auto, Auto" Margin="10">
 			<Grid Grid.Column="0"
-                  Margin="10"
-                  ColumnSpacing="10"
-                  RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto"
-                  ColumnDefinitions="Auto, *">
-                <TextBlock Grid.Row="0"
-                           Grid.Column="0"
-                           Text="First Name"
-                           VerticalAlignment="Center"/>
-                <TextBox Grid.Row="0"
-                         Grid.Column="1"
-                         Text="{Binding FirstName}"
-                         Watermark="Enter first name"/>
-                <TextBlock Classes="Error" 
-                           Text="{Binding FirstNameErrors}"/>
+				  Margin="10"
+				  ColumnSpacing="10"
+				  RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, Auto"
+				  ColumnDefinitions="Auto, *">
+				<TextBlock Grid.Row="0"
+						   Grid.Column="0"
+						   Text="First Name"
+						   VerticalAlignment="Center"/>
+				<TextBox Grid.Row="0"
+						 Grid.Column="1"
+						 Text="{Binding FirstName}"
+						 Watermark="Enter first name"/>
+				<TextBlock Classes="Error"
+						   Text="{Binding FirstNameErrors}"/>
 
-                <TextBlock Grid.Row="1"
-                           Grid.Column="0"
-                           Text="Middle Initial"
-                           VerticalAlignment="Center"/>
-                <TextBox Grid.Row="1"
-                         Grid.Column="1"
-                         Text="{Binding MiddleInitial}"
-                         Watermark="Enter middle initial"/>
-                <TextBlock Classes="Error"
-                           Text="{Binding MiddleInitialErrors}"/>
+				<TextBlock Grid.Row="1"
+						   Grid.Column="0"
+						   Text="Middle Initial"
+						   VerticalAlignment="Center"/>
+				<TextBox Grid.Row="1"
+						 Grid.Column="1"
+						 Text="{Binding MiddleInitial}"
+						 Watermark="Enter middle initial"/>
+				<TextBlock Classes="Error"
+						   Text="{Binding MiddleInitialErrors}"/>
 
-                <TextBlock Grid.Row="2"
-                           Grid.Column="0"
-                           Text="Last Name"
-                           VerticalAlignment="Center"/>
-                <TextBox Grid.Row="2"
-                         Grid.Column="1"
-                         Text="{Binding LastName}"
-                         Watermark="Enter last name"/>
-                <TextBlock Classes="Error"
-                           Text="{Binding LastNameErrors}"/>
+				<TextBlock Grid.Row="2"
+						   Grid.Column="0"
+						   Text="Last Name"
+						   VerticalAlignment="Center"/>
+				<TextBox Grid.Row="2"
+						 Grid.Column="1"
+						 Text="{Binding LastName}"
+						 Watermark="Enter last name"/>
+				<TextBlock Classes="Error"
+						   Text="{Binding LastNameErrors}"/>
 
-                <TextBlock Grid.Row="3"
-                           Grid.Column="0"
-                           Text="Email"
-                           VerticalAlignment="Center"/>
-                <TextBox Grid.Row="3"
-                         Grid.Column="1"
-                         Text="{Binding EmailAddress}"
-                         Watermark="Enter email address"/>
-                <TextBlock Classes="Error"
-                           Text="{Binding EmailErrors}"/>
+				<TextBlock Grid.Row="3"
+						   Grid.Column="0"
+						   Text="Email"
+						   VerticalAlignment="Center"/>
+				<TextBox Grid.Row="3"
+						 Grid.Column="1"
+						 Text="{Binding EmailAddress}"
+						 Watermark="Enter email address"/>
+				<TextBlock Classes="Error"
+						   Text="{Binding EmailErrors}"/>
 
-                <TextBlock Grid.Row="4"
-                           Grid.Column="0"
-                           Text="Phone Number"
-                           VerticalAlignment="Center"/>
-                <TextBox Grid.Row="4"
-                         Grid.Column="1"
-                         Text="{Binding TelephoneNumber}"
-                         Watermark="Enter phone number}"/>
-                <TextBlock Classes="Error"
-                           Text="{Binding TelephoneNumberErrors}"/>
-                
-                <StackPanel Grid.Row="5" 
-                            Grid.Column="1" 
-                            Orientation="Horizontal" 
-                            Spacing="10">
-					<Button Content="Add Contact" 
-                            HorizontalAlignment="Center"
-                            Command="{Binding AddContactCommand}"/>
-                    <Button Content="Update Contact"
-                            Command="{Binding UpdateContactCommand}"/>
-                    <Button Content="Delete Contact"
-                            Command="{Binding DeleteContactCommand}"/>
-                    <Button Content="Clear"
-                            Command="{Binding ClearFieldsCommand}"/>
-                </StackPanel>
-            </Grid>
+				<TextBlock Grid.Row="4"
+						   Grid.Column="0"
+						   Text="Phone Number"
+						   VerticalAlignment="Center"/>
+				<TextBox Grid.Row="4"
+						 Grid.Column="1"
+						 Text="{Binding TelephoneNumber}"
+						 Watermark="Enter phone number}"/>
+				<TextBlock Classes="Error"
+						   Text="{Binding TelephoneNumberErrors}"/>
 
-            <StackPanel Grid.Column="1">
+				<StackPanel Grid.Row="5"
+							Grid.Column="1"
+							Orientation="Horizontal"
+							Spacing="10">
+					<Button Content="Add Contact"
+							HorizontalAlignment="Center"
+							Command="{Binding AddContactCommand}"/>
+					<Button Content="Update Contact"
+							Command="{Binding UpdateContactCommand}"/>
+					<Button Content="Delete Contact"
+							Command="{Binding DeleteContactCommand}"/>
+					<Button Content="Clear"
+							Command="{Binding ClearFieldsCommand}"/>
+				</StackPanel>
+				<StackPanel Grid.Row="6"
+							Grid.Column="1"
+							Orientation="Horizontal"
+							Spacing="10">
+					<Button Content="Email Contact"
+							Command="{Binding SendEmailCommand}"/>
+				</StackPanel>
+			</Grid>
+
+			<StackPanel Grid.Column="1">
 				<Button Content="Refresh" Command="{Binding LoadContactsCommand}"/>
-                <StackPanel Margin="20">
+				<StackPanel Margin="20">
 					<ProgressBar IsVisible="{Binding IsLoading}"
-                                 IsIndeterminate="True"/>
-                    <DataGrid IsReadOnly="True"
-                              AutoGenerateColumns="True"
-                              Grid.Column="1"
-                              IsVisible="{Binding LoadContactsCommand}"
-                              ItemsSource="{Binding Contacts}"
-                              SelectedItem="{Binding SelectedContact}"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal"
-                            HorizontalAlignment="Center"
-                            Spacing="10">
-                    <Button Content="Previous"
-                            Command="{Binding PreviousPageCommand}"
-                            IsEnabled="{Binding HasPreviousPage}"/>
-                    <TextBlock>
+								 IsIndeterminate="True"/>
+					<DataGrid IsReadOnly="True"
+							  AutoGenerateColumns="True"
+							  Grid.Column="1"
+							  IsVisible="{Binding LoadContactsCommand}"
+							  ItemsSource="{Binding Contacts}"
+							  SelectedItem="{Binding SelectedContact}"/>
+				</StackPanel>
+				<StackPanel Orientation="Horizontal"
+							HorizontalAlignment="Center"
+							Spacing="10">
+					<Button Content="Previous"
+							Command="{Binding PreviousPageCommand}"
+							IsEnabled="{Binding HasPreviousPage}"/>
+					<TextBlock>
 						<Run Text="{Binding Page}"/>
-                        <Run Text=" of "/>
-                        <Run Text="{Binding TotalPages}"/>
-                    </TextBlock>
-                    <Button Content="Next"
-                            Command="{Binding NextPageCommand}"
-                            IsEnabled="{Binding HasNextPage}"/>
-                </StackPanel>
-            </StackPanel>
-        </Grid>
-    </ScrollViewer>
-
-</Window>
+						<Run Text=" of "/>
+						<Run Text="{Binding TotalPages}"/>
+					</TextBlock>
+					<Button Content="Next"
+							Command="{Binding NextPageCommand}"
+							IsEnabled="{Binding HasNextPage}"/>
+				</StackPanel>
+			</StackPanel>
+		</Grid>
+	</ScrollViewer>
+</UserControl>

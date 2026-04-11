@@ -5,9 +5,12 @@ using Avalonia.Markup.Xaml;
 using CommunityToolkit.Mvvm.Messaging;
 using DocumentProcessor.Avalonia.TerrenceLGee.Data;
 using DocumentProcessor.Avalonia.TerrenceLGee.Extensions;
-using DocumentProcessor.Avalonia.TerrenceLGee.Interfaces.ServiceInterfaces;
+using DocumentProcessor.Avalonia.TerrenceLGee.Interfaces;
+using DocumentProcessor.Avalonia.TerrenceLGee.Models.EmailModels;
 using DocumentProcessor.Avalonia.TerrenceLGee.ViewModels;
+using DocumentProcessor.Avalonia.TerrenceLGee.Views;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace DocumentProcessor.Avalonia.TerrenceLGee;
 
@@ -30,17 +33,21 @@ public partial class App : Application
         using (var scope = services.CreateScope())
         {
             var context = scope.ServiceProvider.GetRequiredService<ContactDbContext>();
+            var xlService = scope.ServiceProvider.GetRequiredService<IXLService>();
             await context.Database.EnsureCreatedAsync();
-            await DatabaseSeeder.SeedDatabaseAsync(context);
+            await DatabaseSeeder.SeedDatabaseAsync(context, xlService);
         }
+
+        var messenger = services.GetRequiredService<IMessenger>();
+        var mainWindowViewModel = services.GetRequiredService<MainWindowViewModel>();
+        var mainUserViewModel = new MainUserViewModel(services, messenger);
+        mainWindowViewModel.CurrentView = mainUserViewModel;
 
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            var contactService = services.GetRequiredService<IContactService>();
-            var messenger = services.GetRequiredService<IMessenger>();
-            desktop.MainWindow = new ContactsView
+            desktop.MainWindow = new MainWindow
             {
-                DataContext = new ContactsViewModel(contactService, messenger),
+                DataContext = mainWindowViewModel
             };
         }
 

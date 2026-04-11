@@ -2,11 +2,20 @@
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 x:Class="DocumentProcessor.Avalonia.TerrenceLGee.App"
 			 xmlns:local="using:DocumentProcessor.Avalonia.TerrenceLGee"
+			 xmlns:vm="using:DocumentProcessor.Avalonia.TerrenceLGee.ViewModels"
 			 RequestedThemeVariant="Default">
 	<!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
 	<Application.DataTemplates>
-		<local:ViewLocator/>
+		<DataTemplate DataType="{x:Type vm:MainUserViewModel}">
+			<local:MainUserView/>
+		</DataTemplate>
+		<DataTemplate DataType="{x:Type vm:ContactsViewModel}">
+			<local:ContactsView/>
+		</DataTemplate>
+		<DataTemplate DataType="{x:Type vm:EmailViewModel}">
+			<local:EmailView/>
+		</DataTemplate>
 	</Application.DataTemplates>
 
 	<Application.Resources>
