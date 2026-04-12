@@ -88,6 +88,11 @@
 							Spacing="10">
 					<Button Content="Email Contact"
 							Command="{Binding SendEmailCommand}"/>
+					<Button Content="Save To File"
+							Command="{Binding SaveToFileCommand}"
+							CommandParameter="{Binding $self}"/>
+					<Button Content="Exit"
+							Command="{Binding ExitCommand}"/>
 				</StackPanel>
 			</Grid>
 

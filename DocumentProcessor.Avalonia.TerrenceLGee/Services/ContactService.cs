@@ -17,16 +17,16 @@ public class ContactService : IContactService
     {
         _contactRepository = contactRepository;
     }
-    public async Task<Result<bool>> AddContactAsync(CreateContactDto contact)
+    public async Task<Result<RetrievedContactDto?>> AddContactAsync(CreateContactDto contact)
     {
         var result = await _contactRepository.AddContactAsync(contact.FromCreateContactDto());
 
-        if (!result)
+        if (result is null)
         {
-            return Result<bool>.Fail("Unable to add contact.");
+            return Result<RetrievedContactDto?>.Fail("Unable to add contact.");
         }
 
-        return Result<bool>.Ok(result);
+        return Result<RetrievedContactDto?>.Ok(result.ToRetrievedContactDto());
     }
 
     public async Task<Result<bool>> UpdateContactAsync(UpdateContactDto contact)

@@ -35,4 +35,20 @@ public static class FromDto
             };
         }
     }
+
+    extension(RetrievedContactDto dto)
+    {
+        public Contact FromRetrievedContactDto()
+        {
+            return new Contact
+            {
+                Id = dto.Id,
+                FirstName = dto.FirstName,
+                MiddleInitial = dto.MiddleInitial,
+                LastName = dto.LastName,
+                EmailAddress = dto.EmailAddress,
+                TelephoneNumber = dto.TelephoneNumber
+            };
+        }
+    }
 }

@@ -23,20 +23,21 @@ public class ContactRepository : IContactRepository
         _logger = logger;
     }
 
-    public async Task<bool> AddContactAsync(Contact contact)
+    public async Task<Contact?> AddContactAsync(Contact contact)
     {
         var errorMessage = string.Empty;
         try
         {
             await _context.Contacts.AddAsync(contact);
             await _context.SaveChangesAsync();
-            return true;
+            return contact;
         }
         catch (Exception ex)
         {
-            errorMessage = $"{GetMessage}There was an unexpected error adding a new contact: {ex.Message}";
+            errorMessage = $"{GetMessageForLogging(nameof(AddContactAsync))}" +
+                $"There was an unexpected error adding a new contact: {ex.Message}";
             _logger.LogError(ex, "{msg}", errorMessage);
-            return false;
+            return null;
         }
     }
 
@@ -57,7 +58,8 @@ public class ContactRepository : IContactRepository
         }
         catch (Exception ex)
         {
-            errorMessage = $"{GetMessage}There was an unexpected error updating contact {contact.Id}: {ex.Message}";
+            errorMessage = $"{GetMessageForLogging(nameof(UpdateContactAsync))}" +
+                $"There was an unexpected error updating contact {contact.Id}: {ex.Message}";
             _logger.LogError(ex,"{msg}", errorMessage);
             return false;
         }
@@ -80,7 +82,8 @@ public class ContactRepository : IContactRepository
         }
         catch (Exception ex)
         {
-            errorMessage = $"{GetMessage}There was an unexpected error deleting contact {contactId}: {ex.Message}";
+            errorMessage = $"{GetMessageForLogging(nameof(DeleteContactAsync))}" +
+                $"There was an unexpected error deleting contact {contactId}: {ex.Message}";
             _logger.LogError(ex, "{msg}", errorMessage);
             return false;
         }
@@ -99,7 +102,8 @@ public class ContactRepository : IContactRepository
         }
         catch (Exception ex)
         {
-            errorMessage = $"{GetMessage}There was an unexpected error retrieving contact {contactId}: {ex.Message}";
+            errorMessage = $"{GetMessageForLogging(nameof(GetContactAsync))}" +
+                $"There was an unexpected error retrieving contact {contactId}: {ex.Message}";
             _logger.LogError(ex, "{msg}", errorMessage);
             return null;
         }
@@ -117,13 +121,14 @@ public class ContactRepository : IContactRepository
         }
         catch (Exception ex)
         {
-            errorMessage = $"{GetMessage}There was an unexpected error retrieving the contacts: {ex.Message}";
+            errorMessage = $"{GetMessageForLogging(nameof(GetContactsAsync))}" +
+                $"There was an unexpected error retrieving the contacts: {ex.Message}";
             _logger.LogError(ex, "{msg}", errorMessage);
             return [];
         }
     }
 
-    private string GetMessage(string methodName)
+    private string GetMessageForLogging(string methodName)
     {
         return $"\nClass: {nameof(ContactRepository)}\n" +
             $"Method: {methodName}\n";

@@ -1,6 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Messaging;
 using DocumentProcessor.Avalonia.TerrenceLGee.Data;
-using DocumentProcessor.Avalonia.TerrenceLGee.Interfaces;
 using DocumentProcessor.Avalonia.TerrenceLGee.Interfaces.RepositoryInterfaces;
 using DocumentProcessor.Avalonia.TerrenceLGee.Interfaces.ServiceInterfaces;
 using DocumentProcessor.Avalonia.TerrenceLGee.Models.EmailModels;
@@ -32,6 +31,8 @@ public static class ServiceCollectionExtensions
             options.UseSqlite(configuration.GetConnectionString("DefaultConnection") ??
             throw new InvalidOperationException("Connection string 'DefaultConnection' not found.")));
 
+            collection.AddLogging(loggingBuilder => loggingBuilder.AddSerilog(dispose: true));
+
             collection.AddSingleton<IMessenger>(WeakReferenceMessenger.Default);
             collection.AddLogging(loggingBuilder => loggingBuilder.AddSerilog(dispose: true));
             collection.AddSingleton<MainWindowViewModel>();
@@ -43,6 +44,7 @@ public static class ServiceCollectionExtensions
             collection.AddTransient<ISmtpClientFactory, SmtpClientFactory>();
             collection.AddTransient<IEmailService, EmailService>();
             collection.AddTransient<IXLService, XLService>();
+            collection.AddTransient<ITextService, TextService>();
 
             collection.AddOptions<EmailConfiguration>()
                 .Bind(configuration.GetSection("EmailConfiguration"))

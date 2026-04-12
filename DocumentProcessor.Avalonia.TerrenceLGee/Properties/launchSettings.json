@@ -1,7 +1,8 @@
 {
   "profiles": {
     "DocumentProcessor.Avalonia.TerrenceLGee": {
-      "commandName": "Project"
+      "commandName": "Project",
+      "workingDirectory": "C:\\Users\\tlg20\\CSharpAcademy\\DocumentProcessor.TerrenceLGee\\DocumentProcessor.Avalonia.TerrenceLGee"
     }
   }
 }

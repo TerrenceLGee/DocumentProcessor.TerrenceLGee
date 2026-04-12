@@ -7,7 +7,7 @@ namespace DocumentProcessor.Avalonia.TerrenceLGee.Interfaces.RepositoryInterface
 
 public interface IContactRepository
 {
-    Task<bool> AddContactAsync(Contact contact);
+    Task<Contact?> AddContactAsync(Contact contact);
     Task<bool> UpdateContactAsync(Contact contact);
     Task<bool> DeleteContactAsync(int contactId);
     Task<Contact?> GetContactAsync(int contactId);

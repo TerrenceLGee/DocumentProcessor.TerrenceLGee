@@ -8,7 +8,7 @@ namespace DocumentProcessor.Avalonia.TerrenceLGee.Interfaces.ServiceInterfaces;
 
 public interface IContactService
 {
-    Task<Result<bool>> AddContactAsync(CreateContactDto contact);
+    Task<Result<RetrievedContactDto?>> AddContactAsync(CreateContactDto contact);
     Task<Result<bool>> UpdateContactAsync(UpdateContactDto contact);
     Task<Result<bool>> DeleteContactAsync(int contactId);
     Task<Result<RetrievedContactDto?>> GetContactAsync(int contactId);
