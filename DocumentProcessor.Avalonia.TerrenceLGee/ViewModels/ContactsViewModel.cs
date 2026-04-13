@@ -473,6 +473,7 @@ public partial class ContactsViewModel : ObservableValidator
         {
             _messenger.Send(new SendEmailMessage(SelectedContact));
         }
+        ClearFields();
     }
 
     [RelayCommand]
