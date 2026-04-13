@@ -25,6 +25,10 @@ public class ContactDbContext : DbContext
             .IsRequired();
 
         modelBuilder.Entity<Contact>()
+            .HasIndex(c => c.EmailAddress)
+            .IsUnique();
+
+        modelBuilder.Entity<Contact>()
             .Property(c => c.TelephoneNumber)
             .IsRequired();
     }

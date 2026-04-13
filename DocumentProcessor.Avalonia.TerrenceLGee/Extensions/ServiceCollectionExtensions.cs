@@ -45,6 +45,7 @@ public static class ServiceCollectionExtensions
             collection.AddTransient<IEmailService, EmailService>();
             collection.AddTransient<IXLService, XLService>();
             collection.AddTransient<ITextService, TextService>();
+            collection.AddTransient<IPdfService, PdfService>();
 
             collection.AddOptions<EmailConfiguration>()
                 .Bind(configuration.GetSection("EmailConfiguration"))

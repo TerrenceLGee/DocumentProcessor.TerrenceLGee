@@ -96,7 +96,7 @@ public class ContactRepository : IContactRepository
         {
             var contact = await _context.Contacts
                 .AsNoTracking()
-                .FirstAsync(c => c.Id == contactId);
+                .FirstOrDefaultAsync(c => c.Id == contactId);
 
             return contact;
         }

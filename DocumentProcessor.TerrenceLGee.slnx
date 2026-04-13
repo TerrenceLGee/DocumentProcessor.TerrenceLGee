@@ -4,4 +4,6 @@
     <File Path="README.md" />
   </Folder>
   <Project Path="DocumentProcessor.Avalonia.TerrenceLGee/DocumentProcessor.Avalonia.TerrenceLGee.csproj" />
+  <Project Path="DocumentProcessor.IntegrationTests.TerrenceLGee/DocumentProcessor.IntegrationTests.TerrenceLGee.csproj" Id="b69877d0-8d9a-48fc-98f9-6fb1492c0f80" />
+  <Project Path="DocumentProcessor.UnitTests.TerrenceLGee/DocumentProcessor.UnitTests.TerrenceLGee.csproj" Id="da736751-d9ce-4b33-abf6-8ead777e0696" />
 </Solution>

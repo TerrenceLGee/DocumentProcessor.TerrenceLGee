@@ -30,6 +30,7 @@ public partial class ContactsViewModel : ObservableValidator
     private readonly IContactService _contactService;
     private readonly IXLService _xlService;
     private readonly ITextService _textService;
+    private readonly IPdfService _pdfService;
     private readonly IMessenger _messenger;
 
     [ObservableProperty]
@@ -101,11 +102,13 @@ public partial class ContactsViewModel : ObservableValidator
         IContactService contactService, 
         IXLService xlService, 
         ITextService textService,
+        IPdfService pdfService,
         IMessenger messenger)
     {
         _contactService = contactService;
         _xlService = xlService;
         _textService = textService;
+        _pdfService = pdfService;
         _messenger = messenger;
         LoadContactsCommand.Execute(null);
     }
@@ -365,7 +368,12 @@ public partial class ContactsViewModel : ObservableValidator
 
         var textFilter = new FilePickerFileType("Text")
         {
-            Patterns = ["*.txt"],
+            Patterns = ["*.txt"]
+        };
+
+        var pdfFilter = new FilePickerFileType("Pdf")
+        {
+            Patterns = ["*.pdf"]
         };
 
         var options = new FilePickerSaveOptions
@@ -373,7 +381,7 @@ public partial class ContactsViewModel : ObservableValidator
             Title = "Save File",
             SuggestedFileName = "newFile",
             DefaultExtension = "xlsx",
-            FileTypeChoices = [xlsxFilter, textFilter],
+            FileTypeChoices = [pdfFilter, xlsxFilter, textFilter],
             ShowOverwritePrompt = true
         };
 
@@ -434,7 +442,8 @@ public partial class ContactsViewModel : ObservableValidator
         var result = fileExtension switch
         {
             ".xlsx" => _xlService.WriteContactsXLFile(contactsToSave, headerNames, filePath, sheetName),
-            ".txt" => await _textService.WriteContactsTextFileAsync(contactsToSave, headerNames, filePath),
+            ".txt" => _textService.WriteContactsTextFile(contactsToSave, headerNames, filePath),
+            ".pdf" => _pdfService.WriteContactsToPdfFile(contactsToSave, headerNames, filePath),
             _ => Result.Fail("Invalid file format")
         };
 

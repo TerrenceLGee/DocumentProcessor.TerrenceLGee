@@ -88,7 +88,7 @@
 							Spacing="10">
 					<Button Content="Email Contact"
 							Command="{Binding SendEmailCommand}"/>
-					<Button Content="Save To File"
+					<Button Content="Generate Report"
 							Command="{Binding SaveToFileCommand}"
 							CommandParameter="{Binding $self}"/>
 					<Button Content="Exit"
@@ -97,7 +97,15 @@
 			</Grid>
 
 			<StackPanel Grid.Column="1">
-				<Button Content="Refresh" Command="{Binding LoadContactsCommand}"/>
+				<StackPanel >
+					<TextBlock Text="Contacts"
+							   TextDecorations="Underline"
+							   HorizontalAlignment="Center"
+							   Classes="Header"/>
+				</StackPanel>
+				<Button Content="Refresh" 
+						HorizontalAlignment="Center"
+						Command="{Binding LoadContactsCommand}"/>
 				<StackPanel Margin="20">
 					<ProgressBar IsVisible="{Binding IsLoading}"
 								 IsIndeterminate="True"/>

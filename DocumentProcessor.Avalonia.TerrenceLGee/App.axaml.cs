@@ -10,6 +10,7 @@ using DocumentProcessor.Avalonia.TerrenceLGee.Models.EmailModels;
 using DocumentProcessor.Avalonia.TerrenceLGee.ViewModels;
 using DocumentProcessor.Avalonia.TerrenceLGee.Views;
 using Microsoft.Extensions.DependencyInjection;
+using QuestPDF.Infrastructure;
 using Serilog;
 using System;
 using System.IO;
@@ -25,6 +26,8 @@ public partial class App : Application
 
     public async override void OnFrameworkInitializationCompleted()
     {
+        QuestPDF.Settings.License = LicenseType.Community;
+
         BindingPlugins.DataValidators.RemoveAt(0);
 
         var collection = new ServiceCollection();

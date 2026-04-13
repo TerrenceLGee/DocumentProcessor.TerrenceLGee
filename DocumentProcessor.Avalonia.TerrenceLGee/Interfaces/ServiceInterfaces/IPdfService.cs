@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace DocumentProcessor.Avalonia.TerrenceLGee.Interfaces.ServiceInterfaces;
 
-public interface ITextService
+public interface IPdfService
 {
-    Result WriteContactsTextFile(List<Contact> contacts, List<string> headerNames, string fileName);
+    Result WriteContactsToPdfFile(List<Contact> contacts, List<string> headerNames, string fileName);
 }
