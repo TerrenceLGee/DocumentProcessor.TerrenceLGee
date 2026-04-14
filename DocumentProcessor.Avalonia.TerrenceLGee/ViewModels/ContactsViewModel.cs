@@ -13,8 +13,11 @@ using DocumentProcessor.Avalonia.TerrenceLGee.Interfaces.ServiceInterfaces;
 using DocumentProcessor.Avalonia.TerrenceLGee.Mappings;
 using DocumentProcessor.Avalonia.TerrenceLGee.Messages;
 using DocumentProcessor.Avalonia.TerrenceLGee.Models;
+using DocumentProcessor.Avalonia.TerrenceLGee.Services;
+using Microsoft.Extensions.DependencyInjection;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
@@ -27,10 +30,9 @@ namespace DocumentProcessor.Avalonia.TerrenceLGee.ViewModels;
 public partial class ContactsViewModel : ObservableValidator
 {
     private readonly IContactService _contactService;
-    private readonly IXLService _xlService;
-    private readonly ITextService _textService;
-    private readonly IPdfService _pdfService;
-    private readonly ICsvService _csvService;
+    private readonly IFileWriterFactory _writerFactory;
+    private readonly IFileReaderFactory _readerFactory;
+
     private readonly IMessenger _messenger;
 
     [ObservableProperty]
@@ -99,18 +101,14 @@ public partial class ContactsViewModel : ObservableValidator
     private string? _errorMessage;
 
     public ContactsViewModel(
-        IContactService contactService, 
-        IXLService xlService, 
-        ITextService textService,
-        IPdfService pdfService,
-        ICsvService csvService,
+        IContactService contactService,
+        IFileWriterFactory writerFactory,
+        IFileReaderFactory readerFactory,
         IMessenger messenger)
     {
         _contactService = contactService;
-        _xlService = xlService;
-        _textService = textService;
-        _pdfService = pdfService;
-        _csvService = csvService;
+        _writerFactory = writerFactory;
+        _readerFactory = readerFactory;
         _messenger = messenger;
         LoadContactsCommand.Execute(null);
     }
@@ -254,11 +252,9 @@ public partial class ContactsViewModel : ObservableValidator
 
         var fileExtension = fileParts[1];
 
-        Result<List<Contact>> result = fileExtension switch
-        {
-            "xlsx" => _xlService.ReadXLFile(fullPath),
-            _ => Result<List<Contact>>.Fail("Invalid file format")
-        };
+        var reader = _readerFactory.GetReader(fileExtension);
+
+        var result = reader.ReadContactsFromFile(fullPath);
 
         if (result.IsSuccess)
         {
@@ -475,14 +471,9 @@ public partial class ContactsViewModel : ObservableValidator
 
         var fileExtension = Path.GetExtension(filePath).ToLower();
 
-        var result = fileExtension switch
-        {
-            ".xlsx" => _xlService.WriteContactsXLFile(contactsToSave, filePath),
-            ".txt" => _textService.WriteContactsTextFile(contactsToSave, filePath),
-            ".pdf" => _pdfService.WriteContactsToPdfFile(contactsToSave, filePath),
-            ".csv" => _csvService.WriteContactsToCsvFile(contactsToSave, filePath),
-            _ => Result.Fail("Invalid file format")
-        };
+        var writer = _writerFactory.GetWriter(fileExtension);
+
+        var result = writer.WriteContactsToFile(contactsToSave, filePath);
 
         if (result.IsSuccess)
         {

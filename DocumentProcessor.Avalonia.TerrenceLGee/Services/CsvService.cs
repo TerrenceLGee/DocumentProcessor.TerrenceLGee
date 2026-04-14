@@ -11,7 +11,7 @@ using System.IO;
 
 namespace DocumentProcessor.Avalonia.TerrenceLGee.Services;
 
-public class CsvService : ICsvService
+public class CsvService : IFileWriterService, IFileReaderService
 {
     private readonly ILogger<CsvService> _logger;
 
@@ -20,7 +20,7 @@ public class CsvService : ICsvService
         _logger = logger;
     }
 
-    public Result WriteContactsToCsvFile(List<Contact> contacts, string fileName)
+    public Result WriteContactsToFile(List<Contact> contacts, string fileName)
     {
         var errorMessage = string.Empty;
         try
@@ -34,10 +34,17 @@ public class CsvService : ICsvService
         }
         catch (Exception ex)
         {
-            errorMessage = $"{LogMessageHelper.GetMessageForLogging(nameof(CsvService), nameof(WriteContactsToCsvFile))}" +
+            errorMessage = $"{LogMessageHelper.GetMessageForLogging(nameof(CsvService), nameof(WriteContactsToFile))}" +
                 $"There was an unexpected error writing to file: {fileName}: {ex.Message}";
             _logger.LogError(ex, "{msg}", errorMessage);
             return Result.Fail($"There was an unexpected error writing to file: {fileName}");
         }
     }
+
+    public Result<List<Contact>> ReadContactsFromFile(string filePath)
+    {
+        throw new NotImplementedException();
+    }
+
+    public IReadOnlyList<string> SupportedFormats => new List<string> { "csv", ".csv" };
 }

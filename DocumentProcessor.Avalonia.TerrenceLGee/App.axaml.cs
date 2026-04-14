@@ -6,6 +6,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using DocumentProcessor.Avalonia.TerrenceLGee.Data;
 using DocumentProcessor.Avalonia.TerrenceLGee.Extensions;
 using DocumentProcessor.Avalonia.TerrenceLGee.Interfaces.ServiceInterfaces;
+using DocumentProcessor.Avalonia.TerrenceLGee.Services;
 using DocumentProcessor.Avalonia.TerrenceLGee.ViewModels;
 using DocumentProcessor.Avalonia.TerrenceLGee.Views;
 using Microsoft.Extensions.DependencyInjection;
@@ -39,9 +40,10 @@ public partial class App : Application
         using (var scope = services.CreateScope())
         {
             var context = scope.ServiceProvider.GetRequiredService<ContactDbContext>();
-            var xlService = scope.ServiceProvider.GetRequiredService<IXLService>();
+            var readerFactory = scope.ServiceProvider.GetRequiredService<IFileReaderFactory>();
+            var reader = readerFactory.GetReader("xlsx");
             await context.Database.EnsureCreatedAsync();
-            await DatabaseSeeder.SeedDatabaseAsync(context, xlService);
+            await DatabaseSeeder.SeedDatabaseAsync(context, reader);
         }
 
         var messenger = services.GetRequiredService<IMessenger>();

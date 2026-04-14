@@ -10,6 +10,7 @@ namespace DocumentProcessor.Avalonia.TerrenceLGee.ViewModels;
 public partial class MainUserViewModel : ObservableObject
 {
     private readonly IServiceProvider _serviceProvider;
+
     private readonly IMessenger _messenger;
 
     [ObservableProperty]
@@ -18,7 +19,9 @@ public partial class MainUserViewModel : ObservableObject
     [ObservableProperty]
     private ObservableObject? _previousSubView;
 
-    public MainUserViewModel(IServiceProvider serviceProvider, IMessenger messenger)
+    public MainUserViewModel(
+        IServiceProvider serviceProvider, 
+        IMessenger messenger)
     {
         _serviceProvider = serviceProvider;
         _messenger = messenger;

@@ -4,8 +4,8 @@ using System.Collections.Generic;
 
 namespace DocumentProcessor.Avalonia.TerrenceLGee.Interfaces.ServiceInterfaces;
 
-public interface IXLService
+public interface IFileReaderService
 {
-    Result<List<Contact>> ReadXLFile(string filePath);
-    Result WriteContactsXLFile(List<Contact> contacts, string filePath); 
+    IReadOnlyList<string> SupportedFormats { get; }
+    Result<List<Contact>> ReadContactsFromFile(string filePath);
 }

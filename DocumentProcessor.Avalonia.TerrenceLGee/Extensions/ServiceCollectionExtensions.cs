@@ -43,10 +43,20 @@ public static class ServiceCollectionExtensions
             collection.AddTransient<ISmtpClientFactory, SmtpClientFactory>();
             collection.AddTransient<IRetryService, RetryService>();
             collection.AddTransient<IEmailService, EmailService>();
-            collection.AddTransient<IXLService, XLService>();
-            collection.AddTransient<ITextService, TextService>();
-            collection.AddTransient<IPdfService, PdfService>();
-            collection.AddTransient<ICsvService, CsvService>();
+
+            collection.AddTransient<IFileWriterService, XLService>();
+            collection.AddTransient<IFileReaderService, XLService>();
+
+            collection.AddTransient<IFileWriterService, TextService>();
+            collection.AddTransient<IFileReaderService, TextService>();
+
+            collection.AddTransient<IFileWriterService, PdfService>();
+
+            collection.AddTransient<IFileWriterService, CsvService>();
+            collection.AddTransient<IFileReaderService, CsvService>();
+
+            collection.AddSingleton<IFileWriterFactory, FileWriterFactory>();
+            collection.AddSingleton<IFileReaderFactory, FileReaderFactory>();
 
             collection.AddOptions<EmailConfiguration>()
                 .Bind(configuration.GetSection("EmailConfiguration"))

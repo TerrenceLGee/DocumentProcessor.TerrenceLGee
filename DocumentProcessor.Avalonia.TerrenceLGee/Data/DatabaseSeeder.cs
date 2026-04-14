@@ -1,4 +1,5 @@
 ﻿using DocumentProcessor.Avalonia.TerrenceLGee.Interfaces.ServiceInterfaces;
+using DocumentProcessor.Avalonia.TerrenceLGee.Services;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 
@@ -7,11 +8,11 @@ namespace DocumentProcessor.Avalonia.TerrenceLGee.Data;
 public static class DatabaseSeeder
 {
 
-    public static async Task SeedDatabaseAsync(ContactDbContext context, IXLService xlService)
+    public static async Task SeedDatabaseAsync(ContactDbContext context, IFileReaderService writer)
     {
         if (await context.Contacts.AnyAsync()) return;
 
-        var contacts = xlService.ReadXLFile(FilePaths.FilePath);
+        var contacts = writer.ReadContactsFromFile(FilePaths.FilePath);
 
         if (!contacts.IsSuccess || contacts.Value is null) return;
 

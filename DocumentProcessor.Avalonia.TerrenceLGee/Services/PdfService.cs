@@ -11,7 +11,7 @@ using System.Collections.Generic;
 
 namespace DocumentProcessor.Avalonia.TerrenceLGee.Services;
 
-public class PdfService : IPdfService
+public class PdfService : IFileWriterService
 {
     private readonly ILogger<PdfService> _logger;
 
@@ -20,7 +20,7 @@ public class PdfService : IPdfService
         _logger = logger;
     }
 
-    public Result WriteContactsToPdfFile(List<Contact> contacts, string fileName)
+    public Result WriteContactsToFile(List<Contact> contacts, string fileName)
     {
         var errorMessage = string.Empty;
         try
@@ -104,10 +104,12 @@ public class PdfService : IPdfService
         }
         catch (Exception ex)
         {
-            errorMessage = $"{LogMessageHelper.GetMessageForLogging(nameof(PdfService), nameof(WriteContactsToPdfFile))}" +
+            errorMessage = $"{LogMessageHelper.GetMessageForLogging(nameof(PdfService), nameof(WriteContactsToFile))}" +
                 $"There was an unexpected error saving the file: {fileName}: {ex.Message}";
             _logger.LogError(ex, "{msg}", errorMessage);
             return Result.Fail($"There was an unexpected error saving the file: {fileName}");
         }
     }
+
+    public IReadOnlyList<string> SupportedFormats => new List<string> { "pdf", ".pdf" };
 }

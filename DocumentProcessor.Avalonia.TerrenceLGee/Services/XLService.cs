@@ -10,7 +10,7 @@ using System.Linq;
 
 namespace DocumentProcessor.Avalonia.TerrenceLGee.Services;
 
-public class XLService : IXLService
+public class XLService : IFileWriterService, IFileReaderService
 {
     private readonly ILogger<XLService> _logger;
 
@@ -19,7 +19,7 @@ public class XLService : IXLService
         _logger = logger;
     }
 
-    public Result<List<Contact>> ReadXLFile(string filePath)
+    public Result<List<Contact>> ReadContactsFromFile(string filePath)
     {
         var errorMessage = string.Empty;
         try
@@ -50,14 +50,14 @@ public class XLService : IXLService
         }
         catch (Exception ex)
         {
-            errorMessage = $"{LogMessageHelper.GetMessageForLogging(nameof(XLService), nameof(ReadXLFile))}" +
+            errorMessage = $"{LogMessageHelper.GetMessageForLogging(nameof(XLService), nameof(ReadContactsFromFile))}" +
                 $"There was an unexpected error reading file: {filePath}: {ex.Message}";
             _logger.LogError(ex, "{msg}", errorMessage);
             return Result<List<Contact>>.Fail($"There was an unexpected error reading file: {filePath}");
         }
     }
 
-    public Result WriteContactsXLFile(List<Contact> contacts, string filePath)
+    public Result WriteContactsToFile(List<Contact> contacts, string filePath)
     {
         var errorMessage = string.Empty;
         try
@@ -82,10 +82,12 @@ public class XLService : IXLService
         }
         catch (Exception ex)
         {
-            errorMessage = $"{LogMessageHelper.GetMessageForLogging(nameof(XLService), nameof(WriteContactsXLFile))}" +
+            errorMessage = $"{LogMessageHelper.GetMessageForLogging(nameof(XLService), nameof(WriteContactsToFile))}" +
                 $"There was an unexpected error writing to the file: {filePath}: {ex.Message}";
             _logger.LogError(ex, "{msg}", errorMessage);
             return Result.Fail($"There was an unexpected error writing to the file: {filePath}");
         }
     }
+
+    public IReadOnlyList<string> SupportedFormats => new List<string> { "xlsx", ".xlsx" };
 }

@@ -9,7 +9,7 @@ using System.IO;
 
 namespace DocumentProcessor.Avalonia.TerrenceLGee.Services;
 
-public class TextService : ITextService
+public class TextService : IFileWriterService, IFileReaderService
 {
     private readonly ILogger<TextService> _logger;
 
@@ -17,7 +17,7 @@ public class TextService : ITextService
     {
         _logger = logger;
     }
-    public Result WriteContactsTextFile(List<Contact> contacts, string fileName)
+    public Result WriteContactsToFile(List<Contact> contacts, string fileName)
     {
         var errorMessage = string.Empty;
 
@@ -52,10 +52,17 @@ public class TextService : ITextService
         }
         catch (Exception ex)
         {
-            errorMessage = $"{LogMessageHelper.GetMessageForLogging(nameof(TextService), nameof(WriteContactsTextFile))}" +
+            errorMessage = $"{LogMessageHelper.GetMessageForLogging(nameof(TextService), nameof(WriteContactsToFile))}" +
                 $"There was an unexpected error saving the file: {fileName}: {ex.Message}";
             _logger.LogError(ex, "{msg}", errorMessage);
             return Result.Fail($"There was an unexpected error saving the file: {fileName}");
         }
     }
+
+    public Result<List<Contact>> ReadContactsFromFile(string filePath)
+    {
+        throw new NotImplementedException();
+    }
+
+    public IReadOnlyList<string> SupportedFormats => new List<string> { "txt", ".txt" };
 }
