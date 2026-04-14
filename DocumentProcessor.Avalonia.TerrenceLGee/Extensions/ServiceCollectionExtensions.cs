@@ -9,7 +9,6 @@ using DocumentProcessor.Avalonia.TerrenceLGee.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Serilog;
 using System;
 using System.IO;
@@ -42,10 +41,12 @@ public static class ServiceCollectionExtensions
             collection.AddTransient<IContactRepository, ContactRepository>();
             collection.AddTransient<IContactService, ContactService>();
             collection.AddTransient<ISmtpClientFactory, SmtpClientFactory>();
+            collection.AddTransient<IRetryService, RetryService>();
             collection.AddTransient<IEmailService, EmailService>();
             collection.AddTransient<IXLService, XLService>();
             collection.AddTransient<ITextService, TextService>();
             collection.AddTransient<IPdfService, PdfService>();
+            collection.AddTransient<ICsvService, CsvService>();
 
             collection.AddOptions<EmailConfiguration>()
                 .Bind(configuration.GetSection("EmailConfiguration"))

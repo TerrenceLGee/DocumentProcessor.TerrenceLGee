@@ -6,13 +6,11 @@ using CommunityToolkit.Mvvm.Messaging;
 using DocumentProcessor.Avalonia.TerrenceLGee.Data;
 using DocumentProcessor.Avalonia.TerrenceLGee.Extensions;
 using DocumentProcessor.Avalonia.TerrenceLGee.Interfaces.ServiceInterfaces;
-using DocumentProcessor.Avalonia.TerrenceLGee.Models.EmailModels;
 using DocumentProcessor.Avalonia.TerrenceLGee.ViewModels;
 using DocumentProcessor.Avalonia.TerrenceLGee.Views;
 using Microsoft.Extensions.DependencyInjection;
 using QuestPDF.Infrastructure;
 using Serilog;
-using System;
 using System.IO;
 
 namespace DocumentProcessor.Avalonia.TerrenceLGee;

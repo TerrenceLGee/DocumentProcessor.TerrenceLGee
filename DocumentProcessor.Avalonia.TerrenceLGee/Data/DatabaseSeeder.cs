@@ -11,7 +11,7 @@ public static class DatabaseSeeder
     {
         if (await context.Contacts.AnyAsync()) return;
 
-        var contacts = xlService.ReadXLFile(FilePaths.FilePath, FilePaths.WorksheetName);
+        var contacts = xlService.ReadXLFile(FilePaths.FilePath);
 
         if (!contacts.IsSuccess || contacts.Value is null) return;
 

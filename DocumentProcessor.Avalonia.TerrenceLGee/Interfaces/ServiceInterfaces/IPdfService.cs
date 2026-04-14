@@ -6,5 +6,5 @@ namespace DocumentProcessor.Avalonia.TerrenceLGee.Interfaces.ServiceInterfaces;
 
 public interface IPdfService
 {
-    Result WriteContactsToPdfFile(List<Contact> contacts, List<string> headerNames, string fileName);
+    Result WriteContactsToPdfFile(List<Contact> contacts, string fileName);
 }

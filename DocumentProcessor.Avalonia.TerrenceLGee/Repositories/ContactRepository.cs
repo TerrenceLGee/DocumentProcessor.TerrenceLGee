@@ -2,12 +2,14 @@
 using DocumentProcessor.Avalonia.TerrenceLGee.Common.Pagination;
 using DocumentProcessor.Avalonia.TerrenceLGee.Common.Parameters;
 using DocumentProcessor.Avalonia.TerrenceLGee.Data;
+using DocumentProcessor.Avalonia.TerrenceLGee.Helpers;
 using DocumentProcessor.Avalonia.TerrenceLGee.Interfaces.RepositoryInterfaces;
 using DocumentProcessor.Avalonia.TerrenceLGee.Mappings;
 using DocumentProcessor.Avalonia.TerrenceLGee.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace DocumentProcessor.Avalonia.TerrenceLGee.Repositories;
@@ -34,10 +36,28 @@ public class ContactRepository : IContactRepository
         }
         catch (Exception ex)
         {
-            errorMessage = $"{GetMessageForLogging(nameof(AddContactAsync))}" +
+            errorMessage = $"{LogMessageHelper.GetMessageForLogging(nameof(ContactRepository), nameof(AddContactAsync))}" +
                 $"There was an unexpected error adding a new contact: {ex.Message}";
             _logger.LogError(ex, "{msg}", errorMessage);
             return null;
+        }
+    }
+
+    public async Task<bool> AddContactsAsync(List<Contact> contacts)
+    {
+        var errorMessage = string.Empty;
+        try
+        {
+            await _context.Contacts.AddRangeAsync(contacts);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"{LogMessageHelper.GetMessageForLogging(nameof(ContactRepository), nameof(AddContactsAsync))}" +
+                $"There was an unexpected error adding the new contacts: {ex.Message}";
+            _logger.LogError(ex, "{msg}", errorMessage);
+            return false;
         }
     }
 
@@ -58,9 +78,9 @@ public class ContactRepository : IContactRepository
         }
         catch (Exception ex)
         {
-            errorMessage = $"{GetMessageForLogging(nameof(UpdateContactAsync))}" +
+            errorMessage = $"{LogMessageHelper.GetMessageForLogging(nameof(ContactRepository), nameof(UpdateContactAsync))}" +
                 $"There was an unexpected error updating contact {contact.Id}: {ex.Message}";
-            _logger.LogError(ex,"{msg}", errorMessage);
+            _logger.LogError(ex, "{msg}", errorMessage);
             return false;
         }
     }
@@ -82,7 +102,7 @@ public class ContactRepository : IContactRepository
         }
         catch (Exception ex)
         {
-            errorMessage = $"{GetMessageForLogging(nameof(DeleteContactAsync))}" +
+            errorMessage = $"{LogMessageHelper.GetMessageForLogging(nameof(ContactRepository), nameof(DeleteContactAsync))}" +
                 $"There was an unexpected error deleting contact {contactId}: {ex.Message}";
             _logger.LogError(ex, "{msg}", errorMessage);
             return false;
@@ -102,7 +122,7 @@ public class ContactRepository : IContactRepository
         }
         catch (Exception ex)
         {
-            errorMessage = $"{GetMessageForLogging(nameof(GetContactAsync))}" +
+            errorMessage = $"{LogMessageHelper.GetMessageForLogging(nameof(ContactRepository), nameof(GetContactAsync))}" +
                 $"There was an unexpected error retrieving contact {contactId}: {ex.Message}";
             _logger.LogError(ex, "{msg}", errorMessage);
             return null;
@@ -121,16 +141,12 @@ public class ContactRepository : IContactRepository
         }
         catch (Exception ex)
         {
-            errorMessage = $"{GetMessageForLogging(nameof(GetContactsAsync))}" +
+            errorMessage = $"{LogMessageHelper.GetMessageForLogging(nameof(ContactRepository), nameof(GetContactsAsync))}" +
                 $"There was an unexpected error retrieving the contacts: {ex.Message}";
             _logger.LogError(ex, "{msg}", errorMessage);
             return [];
         }
     }
 
-    private string GetMessageForLogging(string methodName)
-    {
-        return $"\nClass: {nameof(ContactRepository)}\n" +
-            $"Method: {methodName}\n";
-    }
+   
 }

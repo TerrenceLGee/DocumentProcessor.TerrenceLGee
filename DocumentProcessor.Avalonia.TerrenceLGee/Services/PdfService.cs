@@ -1,5 +1,6 @@
 ﻿using DocumentProcessor.Avalonia.TerrenceLGee.Common.Results;
 using DocumentProcessor.Avalonia.TerrenceLGee.Interfaces.ServiceInterfaces;
+using DocumentProcessor.Avalonia.TerrenceLGee.Helpers;
 using DocumentProcessor.Avalonia.TerrenceLGee.Models;
 using Microsoft.Extensions.Logging;
 using QuestPDF.Fluent;
@@ -19,11 +20,13 @@ public class PdfService : IPdfService
         _logger = logger;
     }
 
-    public Result WriteContactsToPdfFile(List<Contact> contacts, List<string> headerNames, string fileName)
+    public Result WriteContactsToPdfFile(List<Contact> contacts, string fileName)
     {
         var errorMessage = string.Empty;
         try
         {
+            var headerNames = HeaderHelper.GetHeaderNames();
+
             Document.Create(container =>
             {
                 container.Page(page =>
@@ -101,16 +104,10 @@ public class PdfService : IPdfService
         }
         catch (Exception ex)
         {
-            errorMessage = $"{GetMessageForLogging(nameof(WriteContactsToPdfFile))}" +
+            errorMessage = $"{LogMessageHelper.GetMessageForLogging(nameof(PdfService), nameof(WriteContactsToPdfFile))}" +
                 $"There was an unexpected error saving the file: {fileName}: {ex.Message}";
             _logger.LogError(ex, "{msg}", errorMessage);
             return Result.Fail($"There was an unexpected error saving the file: {fileName}");
         }
-    }
-
-    private string GetMessageForLogging(string methodName)
-    {
-        return $"\nClass: {nameof(PdfService)}\n" +
-             $"Method: {methodName};";
     }
 }

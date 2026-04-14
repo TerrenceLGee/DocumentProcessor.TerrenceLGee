@@ -6,8 +6,10 @@ using DocumentProcessor.Avalonia.TerrenceLGee.DTOs;
 using DocumentProcessor.Avalonia.TerrenceLGee.Interfaces.ServiceInterfaces;
 using DocumentProcessor.Avalonia.TerrenceLGee.Messages;
 using DocumentProcessor.Avalonia.TerrenceLGee.Models.EmailModels;
+using MailKit.Net.Smtp;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,6 +19,7 @@ namespace DocumentProcessor.Avalonia.TerrenceLGee.ViewModels;
 public partial class EmailViewModel : ObservableValidator
 {
     private readonly IEmailService _emailService;
+    private readonly IRetryService _retryService;
     private readonly IMessenger _messenger;
 
     [ObservableProperty]
@@ -61,9 +64,14 @@ public partial class EmailViewModel : ObservableValidator
     [ObservableProperty]
     private string? _errorMessage;
 
-    public EmailViewModel(IEmailService emailService, IMessenger messenger, RetrievedContactDto contactToEmail)
+    public EmailViewModel(
+        IEmailService emailService,
+        IRetryService retryService,
+        IMessenger messenger, 
+        RetrievedContactDto contactToEmail)
     {
         _emailService = emailService;
+        _retryService = retryService;
         _messenger = messenger;
         _contactToEmail = contactToEmail;
         _receiverName = $"{contactToEmail.FirstName} {contactToEmail.LastName}";
@@ -95,27 +103,40 @@ public partial class EmailViewModel : ObservableValidator
             Body = Body
         };
 
-        var result = await _emailService.SendEmailAsync(emailData);
-
-        if (result.IsSuccess)
+        try
         {
-            var box = MessageBoxManager
-                .GetMessageBoxStandard("Success", $"Email successfully send to {ReceiverEmail}", ButtonEnum.Ok, Icon.Success,
-                null, WindowStartupLocation.CenterOwner);
+            var result = await _retryService.ExecuteAsync(async () => await _emailService.SendEmailAsync(emailData),
+                3,
+                TimeSpan.FromMilliseconds(1000),
+                ex => ex is SmtpProtocolException);
 
-            await box.ShowAsync();
-            ClearFields();
+            if (result.IsSuccess)
+            {
+                var box = MessageBoxManager
+                    .GetMessageBoxStandard("Success", $"Email successfully send to {ReceiverEmail}", ButtonEnum.Ok, Icon.Success,
+                    null, WindowStartupLocation.CenterOwner);
+
+                await box.ShowAsync();
+                ClearFields();
+            }
+            else
+            {
+                ErrorMessage = result.ErrorMessage;
+                var box = MessageBoxManager
+                    .GetMessageBoxStandard("Error", $"{ErrorMessage}", ButtonEnum.Ok, Icon.Error,
+                    null, WindowStartupLocation.CenterOwner);
+
+                await box.ShowAsync();
+                ClearFields();
+            }
         }
-        else
+        catch (Exception)
         {
-            ErrorMessage = result.ErrorMessage;
+            ErrorMessage = $"Unexpected error attempting to send email to {ReceiverEmail}";
             var box = MessageBoxManager
                 .GetMessageBoxStandard("Error", $"{ErrorMessage}", ButtonEnum.Ok, Icon.Error,
                 null, WindowStartupLocation.CenterOwner);
-
-            await box.ShowAsync();
-            ClearFields();
-        }
+        } 
     }
 
     [RelayCommand]

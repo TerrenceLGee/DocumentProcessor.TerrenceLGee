@@ -1,4 +1,5 @@
 ﻿using DocumentProcessor.Avalonia.TerrenceLGee.Common.Results;
+using DocumentProcessor.Avalonia.TerrenceLGee.Helpers;
 using DocumentProcessor.Avalonia.TerrenceLGee.Interfaces.ServiceInterfaces;
 using DocumentProcessor.Avalonia.TerrenceLGee.Models.EmailModels;
 using Microsoft.Extensions.Logging;
@@ -58,16 +59,10 @@ public class EmailService : IEmailService
         }
         catch (Exception ex)
         {
-            errorMessage = $"{GetMessageForLogging(nameof(SendEmailAsync))}" +
+            errorMessage = $"{LogMessageHelper.GetMessageForLogging(nameof(EmailService), nameof(SendEmailAsync))}" +
                 $"There was an unexpected error sending email to: {emailData.ReceiverEmail}: {ex.Message}";
             _logger.LogError(ex, "{msg}", errorMessage);
             return Result.Fail($"There was an unexpected error sending email to: {emailData.ReceiverEmail}");
         }
-    }
-
-    private string? GetMessageForLogging(string methodName)
-    {
-        return $"\nClass: {nameof(EmailService)}\n" +
-            $"Method: {methodName}";
     }
 }

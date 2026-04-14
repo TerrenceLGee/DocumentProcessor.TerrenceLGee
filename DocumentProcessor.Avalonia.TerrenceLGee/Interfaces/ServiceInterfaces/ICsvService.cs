@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace DocumentProcessor.Avalonia.TerrenceLGee.Interfaces.ServiceInterfaces;
 
-public interface ITextService
+public interface ICsvService
 {
-    Result WriteContactsTextFile(List<Contact> contacts, string fileName);
+    Result WriteContactsToCsvFile(List<Contact> contacts, string fileName);
 }

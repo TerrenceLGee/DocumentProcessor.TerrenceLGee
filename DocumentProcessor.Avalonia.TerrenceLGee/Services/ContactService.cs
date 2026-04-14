@@ -5,6 +5,8 @@ using DocumentProcessor.Avalonia.TerrenceLGee.DTOs;
 using DocumentProcessor.Avalonia.TerrenceLGee.Interfaces.RepositoryInterfaces;
 using DocumentProcessor.Avalonia.TerrenceLGee.Interfaces.ServiceInterfaces;
 using DocumentProcessor.Avalonia.TerrenceLGee.Mappings;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace DocumentProcessor.Avalonia.TerrenceLGee.Services;
@@ -27,6 +29,18 @@ public class ContactService : IContactService
         }
 
         return Result<RetrievedContactDto?>.Ok(result.ToRetrievedContactDto());
+    }
+
+    public async Task<Result> AddContactsAsync(List<CreateContactDto> contacts)
+    {
+        var result = await _contactRepository.AddContactsAsync(contacts.Select(c => c.FromCreateContactDto()).ToList());
+
+        if (!result)
+        {
+            return Result.Fail("Unable to add contacts.");
+        }
+
+        return Result.Ok();
     }
 
     public async Task<Result<bool>> UpdateContactAsync(UpdateContactDto contact)
@@ -76,4 +90,6 @@ public class ContactService : IContactService
 
         return Result<PagedList<RetrievedContactDto>>.Ok(result.ToPagedListOfRetrievedContactDto(paginationParams));
     }
+
+   
 }

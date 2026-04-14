@@ -13,7 +13,6 @@ using DocumentProcessor.Avalonia.TerrenceLGee.Interfaces.ServiceInterfaces;
 using DocumentProcessor.Avalonia.TerrenceLGee.Mappings;
 using DocumentProcessor.Avalonia.TerrenceLGee.Messages;
 using DocumentProcessor.Avalonia.TerrenceLGee.Models;
-using DocumentProcessor.Avalonia.TerrenceLGee.Services;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
 using System.Collections.Generic;
@@ -31,6 +30,7 @@ public partial class ContactsViewModel : ObservableValidator
     private readonly IXLService _xlService;
     private readonly ITextService _textService;
     private readonly IPdfService _pdfService;
+    private readonly ICsvService _csvService;
     private readonly IMessenger _messenger;
 
     [ObservableProperty]
@@ -103,12 +103,14 @@ public partial class ContactsViewModel : ObservableValidator
         IXLService xlService, 
         ITextService textService,
         IPdfService pdfService,
+        ICsvService csvService,
         IMessenger messenger)
     {
         _contactService = contactService;
         _xlService = xlService;
         _textService = textService;
         _pdfService = pdfService;
+        _csvService = csvService;
         _messenger = messenger;
         LoadContactsCommand.Execute(null);
     }
@@ -214,20 +216,86 @@ public partial class ContactsViewModel : ObservableValidator
                 null, WindowStartupLocation.CenterOwner);
             var response = await box.ShowAsync();
 
-            var addResult = _xlService.AddContactToXLFile(result.Value.FromRetrievedContactDto(),
-                        FilePaths.FilePath, FilePaths.WorksheetName);
-
             await LoadContactsAsync();
             ClearFields();
+        }
+    }
 
-            if (!addResult.IsSuccess)
+    [RelayCommand]
+    private async Task AddContactsFromFileAsync(Visual? visual)
+    {
+        var topLevel = TopLevel.GetTopLevel(visual);
+        if (topLevel is null) return;
+
+        ErrorMessage = null;
+
+        var options = new FilePickerOpenOptions
+        {
+            Title = "Open File",
+        };
+
+        var filePath = await topLevel
+            .StorageProvider
+            .OpenFilePickerAsync(options);
+
+        if (filePath is null) return;
+
+        var fullPath = filePath[0].Path.AbsolutePath.ToString();
+
+        if (fullPath is null) return;
+
+        var fileName = filePath[0].Name;
+
+        if (fileName is null) return;
+
+        var fileParts = fileName.Split('.');
+
+        if (fileParts.Count() < 2) return;
+
+        var fileExtension = fileParts[1];
+
+        Result<List<Contact>> result = fileExtension switch
+        {
+            "xlsx" => _xlService.ReadXLFile(fullPath),
+            _ => Result<List<Contact>>.Fail("Invalid file format")
+        };
+
+        if (result.IsSuccess)
+        {
+            if (result.Value is not null)
             {
-                box = MessageBoxManager
-                        .GetMessageBoxStandard("Error", $"{result.Value.FirstName}{result.Value.LastName} " +
-                        $"not added to the excel spreadsheet", ButtonEnum.Ok, Icon.Error,
+                var contacts = result.Value
+                    .Select(c => c.ToCreateContactDto())
+                    .ToList();
+
+                var addContactsResult = await _contactService.AddContactsAsync(contacts);
+
+                if (addContactsResult.IsSuccess)
+                {
+                    var box = MessageBoxManager
+                        .GetMessageBoxStandard("Success", "Contacts saved successfully", ButtonEnum.Ok, Icon.Success,
                         null, WindowStartupLocation.CenterOwner);
-                await box.ShowAsync();
+                    await box.ShowAsync();
+
+                    await LoadContactsAsync();
+                }
             }
+            else
+            {
+                ErrorMessage = $"No contacts were able to be read from file: {fileName}";
+                var box = MessageBoxManager
+                    .GetMessageBoxStandard("Error", $"{ErrorMessage}", ButtonEnum.Ok, Icon.Error,
+                    null, WindowStartupLocation.CenterOwner);
+            }
+        }
+        else
+        {
+            ErrorMessage = result.ErrorMessage;
+            var box = MessageBoxManager
+                .GetMessageBoxStandard("Error", $"{ErrorMessage}", ButtonEnum.Ok, Icon.Error,
+                null, WindowStartupLocation.CenterOwner);
+
+            await box.ShowAsync();
         }
     }
 
@@ -275,20 +343,8 @@ public partial class ContactsViewModel : ObservableValidator
 
             await box.ShowAsync();
 
-            var updatedResult = _xlService.UpdateContactInXLFile(contact.FromUpdateContactDto(),
-                FilePaths.FilePath, FilePaths.WorksheetName);
-
             await LoadContactsAsync();
             ClearFields();
-
-            if (!updatedResult.IsSuccess)
-            {
-                box = MessageBoxManager
-                        .GetMessageBoxStandard("Error", $"{contact.FirstName}{contact.LastName} " +
-                        $"not updated in the excel spreadsheet", ButtonEnum.Ok, Icon.Error,
-                        null, WindowStartupLocation.CenterOwner);
-                await box.ShowAsync();
-            }
         }
         else
         {
@@ -319,21 +375,8 @@ public partial class ContactsViewModel : ObservableValidator
                     null, WindowStartupLocation.CenterOwner);
                 await box.ShowAsync();
 
-                var deletedResult = _xlService.DeleteContactFromXLFile(SelectedContact.Id,
-                    FilePaths.FilePath, FilePaths.WorksheetName);
-
                 await LoadContactsAsync();
                 ClearFields();
-
-
-                if (!deletedResult.IsSuccess)
-                {
-                    box = MessageBoxManager
-                            .GetMessageBoxStandard("Error", $"{SelectedContact.FirstName}{SelectedContact.LastName} " +
-                            $"not updated in the excel spreadsheet", ButtonEnum.Ok, Icon.Error,
-                            null, WindowStartupLocation.CenterOwner);
-                    await box.ShowAsync();
-                }
 
                 SelectedContact = null;
             }
@@ -353,35 +396,40 @@ public partial class ContactsViewModel : ObservableValidator
     }
 
     [RelayCommand]
-    private async Task SaveToFileAsync(Visual? visual)
+    private async Task GenerateReportAsync(Visual? visual)
     {
         var topLevel = TopLevel.GetTopLevel(visual);
         if (topLevel is null) return;
 
         ErrorMessage = null;
 
-        var xlsxFilter = new FilePickerFileType("Excel")
+        var xlsxFilter = new FilePickerFileType(".xlsx")
         {
             Patterns = ["*.xlsx"],
             MimeTypes = ["application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"]
         };
 
-        var textFilter = new FilePickerFileType("Text")
+        var textFilter = new FilePickerFileType(".txt")
         {
             Patterns = ["*.txt"]
         };
 
-        var pdfFilter = new FilePickerFileType("Pdf")
+        var pdfFilter = new FilePickerFileType(".pdf")
         {
             Patterns = ["*.pdf"]
+        };
+
+        var csvFilter = new FilePickerFileType(".csv")
+        {
+            Patterns = ["*.csv"]
         };
 
         var options = new FilePickerSaveOptions
         {
             Title = "Save File",
-            SuggestedFileName = "newFile",
+            SuggestedFileName = "contacts",
             DefaultExtension = "xlsx",
-            FileTypeChoices = [pdfFilter, xlsxFilter, textFilter],
+            FileTypeChoices = [pdfFilter, xlsxFilter, csvFilter, textFilter],
             ShowOverwritePrompt = true
         };
 
@@ -396,18 +444,6 @@ public partial class ContactsViewModel : ObservableValidator
         var pageSize = 10;
         var totalPages = int.MaxValue;
         var contactsToSave = new List<Contact>();
-        var headerNames = new List<string>
-        {
-            "Id",
-            "First Name",
-            "Middle Initial",
-            "Last Name",
-            "Email Address",
-            "Phone Number"
-        };
-
-        
-        var sheetName = "ContactsSheet";
 
         while (page <= totalPages)
         {
@@ -441,9 +477,10 @@ public partial class ContactsViewModel : ObservableValidator
 
         var result = fileExtension switch
         {
-            ".xlsx" => _xlService.WriteContactsXLFile(contactsToSave, headerNames, filePath, sheetName),
-            ".txt" => _textService.WriteContactsTextFile(contactsToSave, headerNames, filePath),
-            ".pdf" => _pdfService.WriteContactsToPdfFile(contactsToSave, headerNames, filePath),
+            ".xlsx" => _xlService.WriteContactsXLFile(contactsToSave, filePath),
+            ".txt" => _textService.WriteContactsTextFile(contactsToSave, filePath),
+            ".pdf" => _pdfService.WriteContactsToPdfFile(contactsToSave, filePath),
+            ".csv" => _csvService.WriteContactsToCsvFile(contactsToSave, filePath),
             _ => Result.Fail("Invalid file format")
         };
 

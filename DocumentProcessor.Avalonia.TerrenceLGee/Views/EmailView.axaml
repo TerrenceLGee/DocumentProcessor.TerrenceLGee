@@ -53,7 +53,7 @@
                        AcceptsReturn="True"
                        AcceptsTab="True"
                        TextWrapping="Wrap"
-                       Height="600"/>
+                       Height="300"/>
               <TextBlock Classes="Error"
                          Text="{Binding EmailBodyErrors}"/>
           </StackPanel>

@@ -2,6 +2,7 @@
 using DocumentProcessor.Avalonia.TerrenceLGee.Common.Parameters;
 using DocumentProcessor.Avalonia.TerrenceLGee.Common.Results;
 using DocumentProcessor.Avalonia.TerrenceLGee.DTOs;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace DocumentProcessor.Avalonia.TerrenceLGee.Interfaces.ServiceInterfaces;
@@ -9,6 +10,7 @@ namespace DocumentProcessor.Avalonia.TerrenceLGee.Interfaces.ServiceInterfaces;
 public interface IContactService
 {
     Task<Result<RetrievedContactDto?>> AddContactAsync(CreateContactDto contact);
+    Task<Result> AddContactsAsync(List<CreateContactDto> contacts);
     Task<Result<bool>> UpdateContactAsync(UpdateContactDto contact);
     Task<Result<bool>> DeleteContactAsync(int contactId);
     Task<Result<RetrievedContactDto?>> GetContactAsync(int contactId);

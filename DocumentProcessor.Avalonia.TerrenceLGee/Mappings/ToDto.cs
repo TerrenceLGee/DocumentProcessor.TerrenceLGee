@@ -23,6 +23,18 @@ public static class ToDto
                 TelephoneNumber = contact.TelephoneNumber
             };
         }
+
+        public CreateContactDto ToCreateContactDto()
+        {
+            return new CreateContactDto
+            {
+                FirstName = contact.FirstName,
+                MiddleInitial = contact.MiddleInitial,
+                LastName = contact.LastName,
+                EmailAddress = contact.EmailAddress,
+                TelephoneNumber = contact.TelephoneNumber
+            };
+        }
     }
 
     extension(PagedList<Contact> contacts)

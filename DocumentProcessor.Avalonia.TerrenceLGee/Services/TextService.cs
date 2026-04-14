@@ -1,5 +1,6 @@
 ﻿using DocumentProcessor.Avalonia.TerrenceLGee.Common.Results;
 using DocumentProcessor.Avalonia.TerrenceLGee.Interfaces.ServiceInterfaces;
+using DocumentProcessor.Avalonia.TerrenceLGee.Helpers;
 using DocumentProcessor.Avalonia.TerrenceLGee.Models;
 using Microsoft.Extensions.Logging;
 using System;
@@ -16,12 +17,14 @@ public class TextService : ITextService
     {
         _logger = logger;
     }
-    public Result WriteContactsTextFile(List<Contact> contacts, List<string> headerNames, string fileName)
+    public Result WriteContactsTextFile(List<Contact> contacts, string fileName)
     {
         var errorMessage = string.Empty;
 
         try
         {
+            var headerNames = HeaderHelper.GetHeaderNames();
+
             using (var writer = new StreamWriter(fileName))
             {
                 writer.WriteLineAsync($"{headerNames[0],-5} " +
@@ -49,16 +52,10 @@ public class TextService : ITextService
         }
         catch (Exception ex)
         {
-            errorMessage = $"{GetMessageForLogging(nameof(WriteContactsTextFile))}" +
+            errorMessage = $"{LogMessageHelper.GetMessageForLogging(nameof(TextService), nameof(WriteContactsTextFile))}" +
                 $"There was an unexpected error saving the file: {fileName}: {ex.Message}";
             _logger.LogError(ex, "{msg}", errorMessage);
             return Result.Fail($"There was an unexpected error saving the file: {fileName}");
         }
-    }
-
-    private string GetMessageForLogging(string methodName)
-    {
-        return $"\nClass: {nameof(TextService)}\n" +
-            $"Method: {nameof(methodName)}";
     }
 }

@@ -101,4 +101,114 @@ public class EmailServiceTests
         Assert.True(result.IsFailure);
         Assert.False(result.IsSuccess);
     }
+
+    [Fact]
+    public async Task SendEmailAsync_ReturnsResultFail_WhenAuthenticationFails()
+    {
+        var emailData = EmailResources.GetEmailData();
+
+        var mockClient = new Mock<ISmtpClient>();
+
+        _mockClientFactory
+            .Setup(c => c.Create())
+            .Returns(mockClient.Object);
+
+        mockClient
+            .Setup(c => c.ConnectAsync(It.IsAny<string>(), It.IsAny<int>()))
+            .Returns(Task.CompletedTask);
+
+        mockClient
+            .Setup(c => c.AuthenticateAsync(It.IsAny<string>(), It.IsAny<string>()))
+            .ThrowsAsync(new AuthenticationException());
+
+        mockClient
+            .Setup(c => c.DisconnectAsync(It.IsAny<bool>()))
+            .Returns(Task.CompletedTask);
+
+        var result = await _emailService.SendEmailAsync(EmailResources.GetEmailData());
+
+        mockClient.Verify(c => c.ConnectAsync(It.IsAny<string>(), It.IsAny<int>()), Times.Once);
+        mockClient.Verify(c => c.AuthenticateAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+        mockClient.Verify(c => c.SendAsync(It.IsAny<MimeMessage>()), Times.Never);
+        mockClient.Verify(c => c.DisconnectAsync(It.IsAny<bool>()), Times.Never);
+
+        Assert.True(result.IsFailure);
+        Assert.False(result.IsSuccess);
+    }
+
+    [Fact]
+    public async Task SendEmailAsync_ReturnsResultFail_WhenSendingEmailFails()
+    {
+        var emailData = EmailResources.GetEmailData();
+
+        var mockClient = new Mock<ISmtpClient>();
+
+        _mockClientFactory
+            .Setup(c => c.Create())
+            .Returns(mockClient.Object);
+
+        mockClient
+            .Setup(c => c.ConnectAsync(It.IsAny<string>(), It.IsAny<int>()))
+            .Returns(Task.CompletedTask);
+
+        mockClient
+            .Setup(c => c.AuthenticateAsync(It.IsAny<string>(), It.IsAny<string>()))
+            .Returns(Task.CompletedTask);
+
+        mockClient
+            .Setup(c => c.SendAsync(It.IsAny<MimeMessage>()))
+            .ThrowsAsync(new Exception());
+
+        mockClient
+            .Setup(c => c.DisconnectAsync(It.IsAny<bool>()))
+            .Returns(Task.CompletedTask);
+
+        var result = await _emailService.SendEmailAsync(EmailResources.GetEmailData());
+
+        mockClient.Verify(c => c.ConnectAsync(It.IsAny<string>(), It.IsAny<int>()), Times.Once);
+        mockClient.Verify(c => c.AuthenticateAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+        mockClient.Verify(c => c.SendAsync(It.IsAny<MimeMessage>()), Times.Once);
+        mockClient.Verify(c => c.DisconnectAsync(It.IsAny<bool>()), Times.Never);
+
+        Assert.True(result.IsFailure);
+        Assert.False(result.IsSuccess);
+    }
+
+    [Fact]
+    public async Task SendEmailAsync_ReturnsResultFail_WhenDisconnectingConnectionFails()
+    {
+        var emailData = EmailResources.GetEmailData();
+
+        var mockClient = new Mock<ISmtpClient>();
+
+        _mockClientFactory
+            .Setup(c => c.Create())
+            .Returns(mockClient.Object);
+
+        mockClient
+            .Setup(c => c.ConnectAsync(It.IsAny<string>(), It.IsAny<int>()))
+            .Returns(Task.CompletedTask);
+
+        mockClient
+            .Setup(c => c.AuthenticateAsync(It.IsAny<string>(), It.IsAny<string>()))
+            .Returns(Task.CompletedTask);
+
+        mockClient
+            .Setup(c => c.SendAsync(It.IsAny<MimeMessage>()))
+            .Returns(Task.FromResult(It.IsAny<string>()));
+
+        mockClient
+            .Setup(c => c.DisconnectAsync(It.IsAny<bool>()))
+            .ThrowsAsync(new ObjectDisposedException(nameof(_emailService)));
+
+        var result = await _emailService.SendEmailAsync(emailData);
+
+        mockClient.Verify(c => c.ConnectAsync(It.IsAny<string>(), It.IsAny<int>()), Times.Once);
+        mockClient.Verify(c => c.AuthenticateAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+        mockClient.Verify(c => c.SendAsync(It.IsAny<MimeMessage>()), Times.Once);
+        mockClient.Verify(c => c.DisconnectAsync(It.IsAny<bool>()), Times.Once);
+
+        Assert.True(result.IsFailure);
+        Assert.False(result.IsSuccess);
+    }
 }

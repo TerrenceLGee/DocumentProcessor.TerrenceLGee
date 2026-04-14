@@ -32,7 +32,8 @@ public partial class MainUserViewModel : ObservableObject
         {
             PreviousSubView = CurrentSubView;
             var emailService = _serviceProvider.GetRequiredService<IEmailService>();
-            var emailVM = new EmailViewModel(emailService, _messenger, m.Contact);
+            var retryService = _serviceProvider.GetRequiredService<IRetryService>();
+            var emailVM = new EmailViewModel(emailService, retryService, _messenger, m.Contact);
             CurrentSubView = emailVM;
         });
 

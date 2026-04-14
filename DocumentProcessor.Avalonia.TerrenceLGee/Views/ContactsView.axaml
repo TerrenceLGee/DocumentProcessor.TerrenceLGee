@@ -79,8 +79,9 @@
 							Command="{Binding UpdateContactCommand}"/>
 					<Button Content="Delete Contact"
 							Command="{Binding DeleteContactCommand}"/>
-					<Button Content="Clear"
-							Command="{Binding ClearFieldsCommand}"/>
+					<Button Content="Add Contacts From File"
+							Command="{Binding AddContactsFromFileCommand}"
+							CommandParameter="{Binding $self}"/>
 				</StackPanel>
 				<StackPanel Grid.Row="6"
 							Grid.Column="1"
@@ -89,8 +90,10 @@
 					<Button Content="Email Contact"
 							Command="{Binding SendEmailCommand}"/>
 					<Button Content="Generate Report"
-							Command="{Binding SaveToFileCommand}"
+							Command="{Binding GenerateReportCommand}"
 							CommandParameter="{Binding $self}"/>
+					<Button Content="Clear"
+							Command="{Binding ClearFieldsCommand}"/>
 					<Button Content="Exit"
 							Command="{Binding ExitCommand}"/>
 				</StackPanel>
