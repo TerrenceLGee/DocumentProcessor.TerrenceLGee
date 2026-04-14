@@ -11,7 +11,7 @@ using System.Collections.Generic;
 
 namespace DocumentProcessor.Avalonia.TerrenceLGee.Services;
 
-public class PdfService : IFileWriterService
+public class PdfService : IFileWriter
 {
     private readonly ILogger<PdfService> _logger;
 

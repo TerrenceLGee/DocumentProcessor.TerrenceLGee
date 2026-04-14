@@ -1,4 +1,5 @@
 ﻿using CsvHelper;
+using CsvHelper.Configuration;
 using DocumentProcessor.Avalonia.TerrenceLGee.Common.Results;
 using DocumentProcessor.Avalonia.TerrenceLGee.Helpers;
 using DocumentProcessor.Avalonia.TerrenceLGee.Interfaces.ServiceInterfaces;
@@ -11,7 +12,7 @@ using System.IO;
 
 namespace DocumentProcessor.Avalonia.TerrenceLGee.Services;
 
-public class CsvService : IFileWriterService, IFileReaderService
+public class CsvService : IFileWriter, IFileReader
 {
     private readonly ILogger<CsvService> _logger;
 
@@ -43,7 +44,36 @@ public class CsvService : IFileWriterService, IFileReaderService
 
     public Result<List<Contact>> ReadContactsFromFile(string filePath)
     {
-        throw new NotImplementedException();
+        var errorMessage = string.Empty;
+        try
+        {
+            var contacts = new List<Contact>();
+            var config = new CsvConfiguration(CultureInfo.InvariantCulture)
+            {
+                HasHeaderRecord = false
+            };
+
+            using var reader = new StreamReader(filePath);
+            using var csv = new CsvReader(reader, config);
+
+            csv.Context.RegisterClassMap<ContactMap>();
+
+            var contactRecords = csv.GetRecords<Contact>();
+
+            foreach (var contact in contactRecords)
+            {
+                contacts.Add(contact);
+            }
+
+            return Result<List<Contact>>.Ok(contacts);
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"{LogMessageHelper.GetMessageForLogging(nameof(CsvService), nameof(WriteContactsToFile))}" +
+                $"There was an unexpected error reading from file: {filePath}: {ex.Message}";
+            _logger.LogError(ex, "{msg}", errorMessage);
+            return Result<List<Contact>>.Fail($"There was an unexpected error reading file: {filePath}");
+        }
     }
 
     public IReadOnlyList<string> SupportedFormats => new List<string> { "csv", ".csv" };

@@ -6,10 +6,11 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace DocumentProcessor.Avalonia.TerrenceLGee.Services;
 
-public class TextService : IFileWriterService, IFileReaderService
+public class TextService : IFileWriter, IFileReader
 {
     private readonly ILogger<TextService> _logger;
 
@@ -61,7 +62,39 @@ public class TextService : IFileWriterService, IFileReaderService
 
     public Result<List<Contact>> ReadContactsFromFile(string filePath)
     {
-        throw new NotImplementedException();
+        var errorMessage = string.Empty;
+        try
+        {
+            var contacts = new List<Contact>();
+
+            using (var reader = new StreamReader(filePath))
+            {
+                var line = string.Empty;
+
+                while ((line = reader.ReadLine()) is not null)
+                {
+                    var contactLine = Regex.Split(line, @"\s+");
+
+                    contacts.Add(new Contact
+                    {
+                        FirstName = contactLine[0],
+                        MiddleInitial = contactLine[1],
+                        LastName = contactLine[2],
+                        EmailAddress = contactLine[3],
+                        TelephoneNumber = contactLine[4]
+                    });
+                }
+            }
+
+            return Result<List<Contact>>.Ok(contacts);
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"{LogMessageHelper.GetMessageForLogging(nameof(TextService), nameof(WriteContactsToFile))}" +
+                $"There was an unexpected error reading the file: {filePath}: {ex.Message}";
+            _logger.LogError(ex, "{msg}", errorMessage);
+            return Result<List<Contact>>.Fail($"There was an unexpected error reading the file: {filePath}");
+        }
     }
 
     public IReadOnlyList<string> SupportedFormats => new List<string> { "txt", ".txt" };

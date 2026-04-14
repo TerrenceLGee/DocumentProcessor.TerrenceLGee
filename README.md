@@ -51,11 +51,13 @@ dotnet build && dotnet run
 ```
 
 ## Instructions for adding contact from a file.
-- Please make sure if you are adding contacts from a .xlsx file that the first row is the header with the following values in the cells:
+- Please make sure if you are adding contacts from a file to place the contact information in the following order per line:
 ```
-Id | First Name | Middle Initial | Last Name | Email Address | Phone Number
+Contact First Name  Contact Middle Initial  Contact Last Name  Contact Email Address  Contact Telephone Number
 ```
-- You do not have to add an id for the contact in the Id column because it will be added automatically by EntityFramework Core.
+- For adding contacts from a .xlsx file just put each item it's own cell in each row.
+- For adding contacts from a .csv file just separate each item with a comma.
+- For adding contacts from a .txt file just separate each item with a space.
 
 ## Areas To Improve Upon
 - Everything. With each project done from The C# Academy I feel I get better and learn more, but also realize there is always more to learn, more improvements to make and that is one of the most rewarding parts of this "journey".
@@ -77,3 +79,6 @@ Id | First Name | Middle Initial | Last Name | Email Address | Phone Number
 ## Helpful Resources Used
 - [Create Excels with C# and ClosedXML: A tutorial](https://itenium.be/blog/dotnet/create-xlsx-excel-with-closedxml-csharp/)
 - [How to EASILY Create a PDF in C# .NET with QuestPDF!](https://www.youtube.com/watch?v=3qEPv-67iRg)
+- [How to Work with CSV Files - Creating and Reading With Different Options](https://www.youtube.com/watch?v=OguO5TpF-AA)
+- [How to Use Factory Pattern With Dependency Injection in .NET](https://www.youtube.com/watch?v=7HXGmHseQRQ)
+- [Splitting string based on variable number of white spaces](https://stackoverflow.com/questions/12387577/splitting-string-based-on-variable-number-of-white-spaces)

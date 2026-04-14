@@ -6,15 +6,11 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using DocumentProcessor.Avalonia.TerrenceLGee.Common.Parameters;
-using DocumentProcessor.Avalonia.TerrenceLGee.Common.Results;
-using DocumentProcessor.Avalonia.TerrenceLGee.Data;
 using DocumentProcessor.Avalonia.TerrenceLGee.DTOs;
 using DocumentProcessor.Avalonia.TerrenceLGee.Interfaces.ServiceInterfaces;
 using DocumentProcessor.Avalonia.TerrenceLGee.Mappings;
 using DocumentProcessor.Avalonia.TerrenceLGee.Messages;
 using DocumentProcessor.Avalonia.TerrenceLGee.Models;
-using DocumentProcessor.Avalonia.TerrenceLGee.Services;
-using Microsoft.Extensions.DependencyInjection;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
 using System;
@@ -227,9 +223,26 @@ public partial class ContactsViewModel : ObservableValidator
 
         ErrorMessage = null;
 
+        var xlsxFilter = new FilePickerFileType(".xlsx")
+        {
+            Patterns = ["*.xlsx"],
+            MimeTypes = ["application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"]
+        };
+
+        var textFilter = new FilePickerFileType(".txt")
+        {
+            Patterns = ["*.txt"]
+        };
+
+        var csvFilter = new FilePickerFileType(".csv")
+        {
+            Patterns = ["*.csv"]
+        };
+
         var options = new FilePickerOpenOptions
         {
             Title = "Open File",
+            FileTypeFilter = [xlsxFilter, csvFilter, textFilter]
         };
 
         var filePath = await topLevel

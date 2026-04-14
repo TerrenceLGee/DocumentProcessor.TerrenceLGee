@@ -2,5 +2,5 @@
 
 public interface IFileWriterFactory
 {
-    IFileWriterService GetWriter(string format);
+    IFileWriter GetWriter(string format);
 }

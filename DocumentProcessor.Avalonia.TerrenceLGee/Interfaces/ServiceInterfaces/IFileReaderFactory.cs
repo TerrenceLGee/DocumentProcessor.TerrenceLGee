@@ -2,5 +2,5 @@
 
 public interface IFileReaderFactory
 {
-    IFileReaderService GetReader(string format);
+    IFileReader GetReader(string format);
 }

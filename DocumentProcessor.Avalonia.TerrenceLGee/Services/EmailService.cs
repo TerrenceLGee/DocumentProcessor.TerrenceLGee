@@ -42,6 +42,11 @@ public class EmailService : IEmailService
                 HtmlBody = emailData.Body
             };
 
+            if (!string.IsNullOrEmpty(emailData.FilePath))
+            {
+                builder.Attachments.Add(emailData.FilePath);
+            }
+
             email.Body = builder.ToMessageBody();
 
             using (var smtp = _smtpClientFactory.Create())

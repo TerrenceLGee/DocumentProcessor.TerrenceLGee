@@ -10,7 +10,7 @@ using System.Linq;
 
 namespace DocumentProcessor.Avalonia.TerrenceLGee.Services;
 
-public class XLService : IFileWriterService, IFileReaderService
+public class XLService : IFileWriter, IFileReader
 {
     private readonly ILogger<XLService> _logger;
 
@@ -32,16 +32,15 @@ public class XLService : IFileWriterService, IFileReaderService
 
                 var rows = worksheet.RowsUsed();
 
-                foreach (var row in rows.Skip(1))
+                foreach (var row in rows)
                 {
                     contacts.Add(new Contact
                     {
-                        Id = int.TryParse(row.Cell(1).Value.ToString(), out var id) ? id : 0,
-                        FirstName = row.Cell(2).Value.ToString(),
-                        MiddleInitial = row.Cell(3).Value.ToString(),
-                        LastName = row.Cell(4).Value.ToString(),
-                        EmailAddress = row.Cell(5).Value.ToString(),
-                        TelephoneNumber = row.Cell(6).Value.ToString()
+                        FirstName = row.Cell(1).Value.ToString(),
+                        MiddleInitial = row.Cell(2).Value.ToString(),
+                        LastName = row.Cell(3).Value.ToString(),
+                        EmailAddress = row.Cell(4).Value.ToString(),
+                        TelephoneNumber = row.Cell(5).Value.ToString()
                     });
                 }
 

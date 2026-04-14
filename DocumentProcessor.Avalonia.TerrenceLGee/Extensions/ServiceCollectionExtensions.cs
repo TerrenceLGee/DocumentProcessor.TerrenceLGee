@@ -44,16 +44,16 @@ public static class ServiceCollectionExtensions
             collection.AddTransient<IRetryService, RetryService>();
             collection.AddTransient<IEmailService, EmailService>();
 
-            collection.AddTransient<IFileWriterService, XLService>();
-            collection.AddTransient<IFileReaderService, XLService>();
+            collection.AddTransient<IFileWriter, XLService>();
+            collection.AddTransient<IFileReader, XLService>();
 
-            collection.AddTransient<IFileWriterService, TextService>();
-            collection.AddTransient<IFileReaderService, TextService>();
+            collection.AddTransient<IFileWriter, TextService>();
+            collection.AddTransient<IFileReader, TextService>();
 
-            collection.AddTransient<IFileWriterService, PdfService>();
+            collection.AddTransient<IFileWriter, PdfService>();
 
-            collection.AddTransient<IFileWriterService, CsvService>();
-            collection.AddTransient<IFileReaderService, CsvService>();
+            collection.AddTransient<IFileWriter, CsvService>();
+            collection.AddTransient<IFileReader, CsvService>();
 
             collection.AddSingleton<IFileWriterFactory, FileWriterFactory>();
             collection.AddSingleton<IFileReaderFactory, FileReaderFactory>();

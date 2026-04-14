@@ -7,14 +7,14 @@ namespace DocumentProcessor.Avalonia.TerrenceLGee.Services;
 
 public class FileReaderFactory : IFileReaderFactory
 {
-    private readonly IEnumerable<IFileReaderService> _readers;
+    private readonly IEnumerable<IFileReader> _readers;
 
-    public FileReaderFactory(IEnumerable<IFileReaderService> readers)
+    public FileReaderFactory(IEnumerable<IFileReader> readers)
     {
         _readers = readers;
     }
 
-    public IFileReaderService GetReader(string format)
+    public IFileReader GetReader(string format)
     {
         return _readers.FirstOrDefault(r => 
         r.SupportedFormats.Contains(format, StringComparer.OrdinalIgnoreCase))

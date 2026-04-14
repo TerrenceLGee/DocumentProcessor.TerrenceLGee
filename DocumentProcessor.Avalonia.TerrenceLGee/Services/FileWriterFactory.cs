@@ -7,14 +7,14 @@ namespace DocumentProcessor.Avalonia.TerrenceLGee.Services;
 
 public class FileWriterFactory : IFileWriterFactory
 {
-    private readonly IEnumerable<IFileWriterService> _writers;
+    private readonly IEnumerable<IFileWriter> _writers;
 
-    public FileWriterFactory(IEnumerable<IFileWriterService> writers)
+    public FileWriterFactory(IEnumerable<IFileWriter> writers)
     {
         _writers = writers;
     }
 
-    public IFileWriterService GetWriter(string format)
+    public IFileWriter GetWriter(string format)
     {
         return _writers.FirstOrDefault(w =>
         w.SupportedFormats.Contains(format, StringComparer.OrdinalIgnoreCase))

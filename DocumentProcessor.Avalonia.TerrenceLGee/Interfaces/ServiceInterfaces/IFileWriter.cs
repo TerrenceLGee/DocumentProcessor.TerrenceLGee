@@ -4,8 +4,8 @@ using System.Collections.Generic;
 
 namespace DocumentProcessor.Avalonia.TerrenceLGee.Interfaces.ServiceInterfaces;
 
-public interface IFileReaderService
+public interface IFileWriter
 {
     IReadOnlyList<string> SupportedFormats { get; }
-    Result<List<Contact>> ReadContactsFromFile(string filePath);
+    Result WriteContactsToFile(List<Contact> contacts, string filePath);
 }

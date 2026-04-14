@@ -8,7 +8,7 @@ namespace DocumentProcessor.Avalonia.TerrenceLGee.Data;
 public static class DatabaseSeeder
 {
 
-    public static async Task SeedDatabaseAsync(ContactDbContext context, IFileReaderService writer)
+    public static async Task SeedDatabaseAsync(ContactDbContext context, IFileReader writer)
     {
         if (await context.Contacts.AnyAsync()) return;
 
