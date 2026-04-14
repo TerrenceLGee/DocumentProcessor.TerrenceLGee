@@ -9,7 +9,8 @@ Created following the curriculm of [C# Academy](https://www.thecsharpacademy.com
 - On the first run of the project if there is no database it will be created and it will be seeded with contacts from an Excel spreadsheet (included in the project root directory). The database connection string is in appsettings.json if you want to change the database name before running this program.
 - Allows the user to add, update, delete, and retrieve contacts from the database. 
 - Allows the user to send email to a contact (the contacts that are seeded are not 'real' contacts with 'real' email addresses so please add a contact with a legitimate email address to test this functionality).
-- Allows the user to generate a 'report' of the contacts in either, .txt, .xlsx, .csv, or .pdf format.
+- Allows the user to generate a 'report' of the contacts in either, .txt, .xlsx, .csv, or .pdf format. 
+- Also gives the user upon generating the report the option to email the report to their email address (The one specified in appsettings.json see below in the instructions on sending email).
 - Allows the user to add contacts to the database from a file in either .txt, .xlsx, or .csv format.
 - Implements retry functionality for sending emails in case of smtp errors.
 - Implements logging

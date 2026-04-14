@@ -11,6 +11,8 @@ using DocumentProcessor.Avalonia.TerrenceLGee.Interfaces.ServiceInterfaces;
 using DocumentProcessor.Avalonia.TerrenceLGee.Mappings;
 using DocumentProcessor.Avalonia.TerrenceLGee.Messages;
 using DocumentProcessor.Avalonia.TerrenceLGee.Models;
+using DocumentProcessor.Avalonia.TerrenceLGee.Models.EmailModels;
+using Microsoft.Extensions.Options;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
 using System;
@@ -26,6 +28,8 @@ namespace DocumentProcessor.Avalonia.TerrenceLGee.ViewModels;
 public partial class ContactsViewModel : ObservableValidator
 {
     private readonly IContactService _contactService;
+    private readonly IEmailService _emailService;
+    private readonly EmailConfiguration _emailConfiguration;
     private readonly IFileWriterFactory _writerFactory;
     private readonly IFileReaderFactory _readerFactory;
 
@@ -98,13 +102,17 @@ public partial class ContactsViewModel : ObservableValidator
 
     public ContactsViewModel(
         IContactService contactService,
+        IEmailService emailService,
         IFileWriterFactory writerFactory,
         IFileReaderFactory readerFactory,
+        IOptions<EmailConfiguration> configuration,
         IMessenger messenger)
     {
         _contactService = contactService;
+        _emailService = emailService;
         _writerFactory = writerFactory;
         _readerFactory = readerFactory;
+        _emailConfiguration = configuration.Value;
         _messenger = messenger;
         LoadContactsCommand.Execute(null);
     }
@@ -492,9 +500,41 @@ public partial class ContactsViewModel : ObservableValidator
         {
             var box = MessageBoxManager
                     .GetMessageBoxStandard("Success",
-                    $"File saved successfully", ButtonEnum.Ok, Icon.Success,
+                    $"Report generated successfully\nEmail report to yourself?", ButtonEnum.YesNo, Icon.Success,
                     null, WindowStartupLocation.CenterOwner);
-            await box.ShowAsync();
+            var response = await box.ShowAsync();
+
+            if (response == ButtonResult.Yes)
+            {
+                var emailData = new EmailData
+                {
+                    ReceiverName = _emailConfiguration.SenderName,
+                    ReceiverEmail = _emailConfiguration.SenderEmail,
+                    Subject = $"Contacts report for {DateTime.Now}",
+                    Body = "Lastest report of your saved contacts. See attached file",
+                    FilePath = filePath
+                };
+
+                var emailResult = await _emailService.SendEmailAsync(emailData);
+
+                if (emailResult.IsSuccess)
+                {
+                    box = MessageBoxManager
+                        .GetMessageBoxStandard("Success", $"Report successfully sent to {emailData.ReceiverEmail}", ButtonEnum.Ok,
+                        Icon.Success, null, WindowStartupLocation.CenterOwner);
+
+                    await box.ShowAsync();
+                }
+                else
+                {
+                    ErrorMessage = emailResult.ErrorMessage;
+                    box = MessageBoxManager
+                        .GetMessageBoxStandard("Error", $"{ErrorMessage}", ButtonEnum.Ok, Icon.Error, 
+                        null, WindowStartupLocation.CenterOwner);
+
+                    await box.ShowAsync();
+                }
+            }
         }
         else
         {
