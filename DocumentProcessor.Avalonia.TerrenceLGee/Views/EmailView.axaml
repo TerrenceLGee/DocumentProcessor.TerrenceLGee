@@ -1,84 +1,106 @@
 <UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             xmlns:vm="using:DocumentProcessor.Avalonia.TerrenceLGee.ViewModels"
-             x:DataType="vm:EmailViewModel"
-             x:Class="DocumentProcessor.Avalonia.TerrenceLGee.EmailView">
-  <ScrollViewer>
-	  <Grid RowDefinitions="Auto, Auto, Auto, Auto"
-            Margin="10">
-          <StackPanel Grid.Row="0"
-                      HorizontalAlignment="Center">
-              <TextBlock Text="📤 Send Email"
-                         Classes="Header"/>
-          </StackPanel>
-          <StackPanel Grid.Row="1"
-                      Spacing="10"
-                      Margin="10">
-              <TextBlock Text="Recipient Name"
-                         Classes="Label"
-                         HorizontalAlignment="Center"/>
-              <TextBox Text="{Binding ReceiverName}"
-                       Width="300"
-                       HorizontalAlignment="Center"/>
-              <TextBlock Classes="Error"
-                         Text="{Binding RecipientNameErrors}"/>
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			 xmlns:vm="using:DocumentProcessor.Avalonia.TerrenceLGee.ViewModels"
+			 x:DataType="vm:EmailViewModel"
+			 x:Class="DocumentProcessor.Avalonia.TerrenceLGee.EmailView">
+	<ScrollViewer>
+		<Grid ColumnDefinitions="Auto, *" Margin="10">
+			<Grid RowDefinitions="Auto, Auto, Auto"
+				  Grid.Column="0"
+				  Margin="10">
+				<StackPanel Grid.Row="0"
+							HorizontalAlignment="Center">
+					<TextBlock Text="✉ Send Email"
+							   Classes="Header"/>
+				</StackPanel>
+				<StackPanel Grid.Row="1"
+							Spacing="10"
+							Margin="10">
+					<TextBlock Text="Recipient Name"
+							   Classes="Label"
+							   HorizontalAlignment="Center"/>
+					<TextBox Text="{Binding ReceiverName}"
+							 Width="300"
+							 HorizontalAlignment="Center"/>
+					<TextBlock Classes="Error"
+							   Text="{Binding RecipientNameErrors}"/>
 
-              <TextBlock Text="Recipient Email"
-                         Classes="Label"
-                         HorizontalAlignment="Center"/>
-              <TextBox Text="{Binding ReceiverEmail}"
-                       Width="300"
-                       HorizontalAlignment="Center"/>
-              <TextBlock Classes="Error"
-                         Text="{Binding RecipientEmailErrors}"/>
+					<TextBlock Text="Recipient Email"
+							   Classes="Label"
+							   HorizontalAlignment="Center"/>
+					<TextBox Text="{Binding ReceiverEmail}"
+							 Width="300"
+							 HorizontalAlignment="Center"/>
+					<TextBlock Classes="Error"
+							   Text="{Binding RecipientEmailErrors}"/>
 
-              <TextBlock Text="Subject"
-                         Classes="Label"
-                         HorizontalAlignment="Center"/>
-              <TextBox Text="{Binding Subject}"
-                       Width="600"
-                       HorizontalAlignment="Center"/>
-              <TextBlock Classes="Error"
-                         Text="{Binding EmailSubjectErrors}"/>
+					<TextBlock Text="Subject"
+							   Classes="Label"
+							   HorizontalAlignment="Center"/>
+					<TextBox Text="{Binding Subject}"
+							 Width="600"
+							 HorizontalAlignment="Center"/>
+					<TextBlock Classes="Error"
+							   Text="{Binding EmailSubjectErrors}"/>
 
-              <TextBlock Text="Body"
-                         Classes="Label"
-                         HorizontalAlignment="Center"/>
-              <TextBox Text="{Binding Body}"
-                       Width="600"
-                       HorizontalAlignment="Center"
-                       AcceptsReturn="True"
-                       AcceptsTab="True"
-                       TextWrapping="Wrap"
-                       Height="200"/>
-              <TextBlock Classes="Error"
-                         Text="{Binding EmailBodyErrors}"/>
-          </StackPanel>
-          <StackPanel Grid.Row="2" 
-                      HorizontalAlignment="Center"
-                      Orientation="Horizontal">
-              <Button Content="Add Attachment" 
-                      Command="{Binding AddAttachmentCommand}"
-                      CommandParameter="{Binding $self}"/>
-          </StackPanel>
-          <StackPanel Grid.Row="3"
-                      HorizontalAlignment="Center"
-                      Orientation="Horizontal">
-              <Button Content="Send"
-                      Command="{Binding SendEmailCommand}"
-                      Margin="0,10,0,0"/>
-              <Button Content="Clear"
-                      Classes="Success"
-                      Command="{Binding ClearFieldsCommand}"
-                      Margin="0,10,0,0"/>
-              <Button Content="Back"
-                      Classes="Success"
-                      Command="{Binding GoBackCommand}"
-                      Margin="0,10,0,0"/>
-          </StackPanel>
-      </Grid>
-  </ScrollViewer>
+					<TextBlock Text="Body"
+							   Classes="Label"
+							   HorizontalAlignment="Center"/>
+					<TextBox Text="{Binding Body}"
+							 Width="600"
+							 HorizontalAlignment="Center"
+							 AcceptsReturn="True"
+							 AcceptsTab="True"
+							 TextWrapping="Wrap"
+							 Height="200"/>
+					<TextBlock Classes="Error"
+							   Text="{Binding EmailBodyErrors}"/>
+				</StackPanel>
+				<StackPanel Grid.Row="2"
+							HorizontalAlignment="Center"
+							Orientation="Horizontal">
+					<Button Content="📨 Send"
+							Command="{Binding SendEmailCommand}"
+							Margin="0,10,0,0"/>
+					<Button Content="🧹Clear"
+							Classes="Success"
+							Command="{Binding ClearFieldsCommand}"
+							Margin="0,10,0,0"/>
+					<Button Content="↩️ Back"
+							Classes="Success"
+							Command="{Binding GoBackCommand}"
+							Margin="0,10,0,0"/>
+				</StackPanel>
+			</Grid>
+			<Grid RowDefinitions="Auto, Auto"
+				  Margin="10"
+				  Grid.Column="1">
+				<StackPanel Grid.Row="0">
+					<DataGrid IsReadOnly="True"
+							  SelectedItem="{Binding SelectedAttachment}"
+							  ItemsSource="{Binding Attachments}">
+						<DataGrid.Columns>
+							<DataGridTextColumn Header="📎Attachments" 
+												Binding="{Binding FilePath}"
+												Width="Auto"/>
+						</DataGrid.Columns>
+					</DataGrid>
+				</StackPanel>
+				<StackPanel Grid.Row="1" 
+							HorizontalAlignment="Center" 
+							Orientation="Horizontal">
+					<Button Content="➕ Add Attachment"
+							Command="{Binding AddAttachmentCommand}"
+							CommandParameter="{Binding $self}"/>
+					<Button Content="➖ Remove Attachment" 
+							Command="{Binding RemoveAttachmentCommand}"/>
+					<Button Content="🗑 Clear Attachments"
+							Command="{Binding ClearAttachmentsCommand}"/>
+				</StackPanel>
+			</Grid>
+		</Grid>
+	</ScrollViewer>
 </UserControl>

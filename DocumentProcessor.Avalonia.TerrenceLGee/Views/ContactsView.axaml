@@ -7,11 +7,11 @@
 			 x:DataType="vm:ContactsViewModel"
 			 x:Class="DocumentProcessor.Avalonia.TerrenceLGee.ContactsView">
 	<ScrollViewer>
-		<Grid ColumnDefinitions="Auto, Auto" Margin="10">
+		<Grid ColumnDefinitions="*, Auto" Margin="10">
 			<Grid Grid.Column="0"
 				  Margin="10"
-				  ColumnSpacing="10"
-				  RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, Auto"
+				  ColumnSpacing="5"
+				  RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto"
 				  ColumnDefinitions="Auto, *">
 				<TextBlock Grid.Row="0"
 						   Grid.Column="0"
@@ -72,41 +72,45 @@
 							Grid.Column="1"
 							Orientation="Horizontal"
 							Spacing="10">
-					<Button Content="Add Contact"
+					<Button Content="👇 Add Contact"
 							HorizontalAlignment="Center"
 							Command="{Binding AddContactCommand}"/>
-					<Button Content="Update Contact"
+					<Button Content="✍️ Update Contact"
 							Command="{Binding UpdateContactCommand}"/>
-					<Button Content="Delete Contact"
+					<Button Content="🗑️ Delete Contact"
 							Command="{Binding DeleteContactCommand}"/>
-					<Button Content="Add Contacts From File"
-							Command="{Binding AddContactsFromFileCommand}"
-							CommandParameter="{Binding $self}"/>
 				</StackPanel>
 				<StackPanel Grid.Row="6"
 							Grid.Column="1"
 							Orientation="Horizontal"
 							Spacing="10">
-					<Button Content="Email Contact"
+					<Button Content="📄 Add Contacts From File"
+							Command="{Binding AddContactsFromFileCommand}"
+							CommandParameter="{Binding $self}"/>
+					<Button Content="✉ Email Contact"
 							Command="{Binding SendEmailCommand}"/>
-					<Button Content="Generate Report"
+					<Button Content="📝 Generate Report"
 							Command="{Binding GenerateReportCommand}"
 							CommandParameter="{Binding $self}"/>
-					<Button Content="Clear"
+				</StackPanel>
+				<StackPanel Grid.Row="7"
+							Grid.Column="1"
+							Orientation="Horizontal"
+							Spacing="10">
+					<Button Content="✔ Clear"
 							Command="{Binding ClearFieldsCommand}"/>
-					<Button Content="Exit"
+					<Button Content="🚪 Exit"
 							Command="{Binding ExitCommand}"/>
 				</StackPanel>
 			</Grid>
 
 			<StackPanel Grid.Column="1">
 				<StackPanel >
-					<TextBlock Text="Contacts"
-							   TextDecorations="Underline"
+					<TextBlock Text="👥 Contacts"
 							   HorizontalAlignment="Center"
 							   Classes="Header"/>
 				</StackPanel>
-				<Button Content="Refresh" 
+				<Button Content="Refresh"
 						HorizontalAlignment="Center"
 						Command="{Binding LoadContactsCommand}"/>
 				<StackPanel Margin="20">

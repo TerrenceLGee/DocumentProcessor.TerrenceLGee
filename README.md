@@ -18,7 +18,7 @@ Created following the curriculm of [C# Academy](https://www.thecsharpacademy.com
 - Integration testing of the CRUD operations of the database.
 
 ## Challenges Faced When Implementing This Project
-- No real challenges because the external libraries used for .xlsx and .pdf functionality had great easy to understand documentation.
+- No real challenges with file operations because the external libraries used for .xlsx, .csv and .pdf functionality had great easy to understand documentation.
 - No real challenges with AvaloniaUI because it was a simple project.
 
 ## What I Learned Implementing This Project
@@ -61,7 +61,7 @@ Contact First Name  Contact Middle Initial  Contact Last Name  Contact Email Add
 - For adding contacts from a .txt file just separate each item with a space.
 
 ## Areas To Improve Upon
-- Everything. With each project done from The C# Academy I feel I get better and learn more, but also realize there is always more to learn, more improvements to make and that is one of the most rewarding parts of this "journey".
+- Everything. With each project done from The C# Academy I feel I get better and learn more. I also found I learn more when I expand on them like I have done with this project.
 
 ## Technologies Used
 - [.NET10](https://dotnet.microsoft.com/en-us/download/dotnet/10.0)
@@ -83,3 +83,4 @@ Contact First Name  Contact Middle Initial  Contact Last Name  Contact Email Add
 - [How to Work with CSV Files - Creating and Reading With Different Options](https://www.youtube.com/watch?v=OguO5TpF-AA)
 - [How to Use Factory Pattern With Dependency Injection in .NET](https://www.youtube.com/watch?v=7HXGmHseQRQ)
 - [Splitting string based on variable number of white spaces](https://stackoverflow.com/questions/12387577/splitting-string-based-on-variable-number-of-white-spaces)
+- [Regex for phone number](https://ihateregex.io/expr/phone/)

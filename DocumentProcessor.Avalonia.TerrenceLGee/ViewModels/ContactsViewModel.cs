@@ -91,6 +91,7 @@ public partial class ContactsViewModel : ObservableValidator
 
     [ObservableProperty]
     [Required(ErrorMessage = "Telephone number is required.")]
+    [RegularExpression(@"^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$", ErrorMessage = "Invalid phone number.")]
     [NotifyPropertyChangedFor(nameof(TelephoneNumberErrors))]
     private string _telephoneNumber;
 
@@ -512,7 +513,7 @@ public partial class ContactsViewModel : ObservableValidator
                     ReceiverEmail = _emailConfiguration.SenderEmail,
                     Subject = $"Contacts report for {DateTime.Now}",
                     Body = "Lastest report of your saved contacts. See attached file",
-                    FilePath = filePath
+                    Attachments = [new Attachment { FilePath = filePath}]
                 };
 
                 var emailResult = await _emailService.SendEmailAsync(emailData);

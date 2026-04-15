@@ -37,14 +37,22 @@ public class EmailService : IEmailService
 
             email.Subject = emailData.Subject;
 
+            var body = EmailHelper.GetFormattedEmailText(emailData, _configuration.SenderName);
+
             var builder = new BodyBuilder
             {
-                HtmlBody = emailData.Body
+                HtmlBody = body
             };
 
-            if (!string.IsNullOrEmpty(emailData.FilePath))
+            if (emailData.Attachments.Count > 0)
             {
-                builder.Attachments.Add(emailData.FilePath);
+                foreach (var attachment in emailData.Attachments)
+                {
+                    if (!string.IsNullOrEmpty(attachment.FilePath))
+                    {
+                        builder.Attachments.Add(attachment.FilePath);
+                    }
+                }
             }
 
             email.Body = builder.ToMessageBody();
