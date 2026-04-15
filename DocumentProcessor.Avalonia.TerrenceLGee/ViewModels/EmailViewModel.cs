@@ -1,4 +1,6 @@
-﻿using Avalonia.Controls;
+﻿using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
@@ -64,6 +66,9 @@ public partial class EmailViewModel : ObservableValidator
     [ObservableProperty]
     private string? _errorMessage;
 
+    [ObservableProperty]
+    private string? filePath;
+
     public EmailViewModel(
         IEmailService emailService,
         IRetryService retryService,
@@ -100,7 +105,8 @@ public partial class EmailViewModel : ObservableValidator
             ReceiverName = ReceiverName,
             ReceiverEmail = ReceiverEmail,
             Subject = Subject,
-            Body = Body
+            Body = Body,
+            FilePath = FilePath
         };
 
         try
@@ -137,6 +143,28 @@ public partial class EmailViewModel : ObservableValidator
                 .GetMessageBoxStandard("Error", $"{ErrorMessage}", ButtonEnum.Ok, Icon.Error,
                 null, WindowStartupLocation.CenterOwner);
         } 
+    }
+
+    [RelayCommand]
+    private async Task AddAttachmentAsync(Visual? visual)
+    {
+        var topLevel = TopLevel.GetTopLevel(visual);
+        if (topLevel is null) return;
+
+        var options = new FilePickerOpenOptions
+        {
+            Title = "Add Attachment",
+        };
+
+        var path = await topLevel
+            .StorageProvider
+            .OpenFilePickerAsync(options);
+
+        if (path.Count == 0 || path is null) return;
+
+        var tempPath = path[0].Path.PathAndQuery.ToString();
+
+        FilePath = tempPath.Replace("%20", " ");
     }
 
     [RelayCommand]

@@ -11,7 +11,7 @@ public static class QueryableExtensions
     {
         public async Task<PagedList<T>> ToPagedListAsync(int page, int pageSize)
         {
-            var count = source.Count();
+            var count = await source.CountAsync();
 
             if (count > 0)
             {
