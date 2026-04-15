@@ -110,7 +110,7 @@
 							   HorizontalAlignment="Center"
 							   Classes="Header"/>
 				</StackPanel>
-				<Button Content="Refresh"
+				<Button Content="⟳ Refresh"
 						HorizontalAlignment="Center"
 						Command="{Binding LoadContactsCommand}"/>
 				<StackPanel Margin="20">
@@ -126,7 +126,7 @@
 				<StackPanel Orientation="Horizontal"
 							HorizontalAlignment="Center"
 							Spacing="10">
-					<Button Content="Previous"
+					<Button Content="⬅ Previous"
 							Command="{Binding PreviousPageCommand}"
 							IsEnabled="{Binding HasPreviousPage}"/>
 					<TextBlock>
@@ -134,7 +134,7 @@
 						<Run Text=" of "/>
 						<Run Text="{Binding TotalPages}"/>
 					</TextBlock>
-					<Button Content="Next"
+					<Button Content="Next ➟"
 							Command="{Binding NextPageCommand}"
 							IsEnabled="{Binding HasNextPage}"/>
 				</StackPanel>
